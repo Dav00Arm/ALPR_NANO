@@ -1,1 +1,1 @@
-# FULL_ALPR_NANO
+# ALPR with UI for Jetson Nano
