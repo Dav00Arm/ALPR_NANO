@@ -1,0 +1,279 @@
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unordered_map>
+#include <iterator>
+#include "curl/curl.h"
+#include <json/json.h>
+// #undef FALSE
+#define FALSE 0
+// #undef TRUE
+#define TRUE 1
+Json::Value ConvertToJson(std::unordered_map<std::string, std::string> map)
+{
+    Json::Value json;
+
+    for(auto& element : map)
+    {
+        json[element.first] = element.second;
+
+    }
+    return json;
+}
+
+int PostJSON(std::unordered_map<std::string, std::string> frees,std::unordered_map<std::string, std::string> frees_spot)
+{
+  FILE *wfd = fopen("foo.txt", "w");
+
+  int retcode = FALSE;
+  CURL *curl = NULL;
+  CURLcode res = CURLE_FAILED_INIT;
+  char errbuf[CURL_ERROR_SIZE] = { 0, };
+  struct curl_slist *headers = NULL;
+  char agent[1024] = { 0, };
+
+////////////////////////////// 
+  Json::Value root;
+  Json::Value leaf;
+  constexpr bool shouldUseOldWay = false;
+
+  // root["mac_address"]= "2C:54:91:88:C9:E3";
+  // root["camera_id"] = 1;
+  // root["spot_id"] = 1;
+  // root["license_number"] = "01AI201";
+  // root["confidence"] = 97;
+  // root["time"] = "10-01-2003 16:20:30";
+
+  root = ConvertToJson(frees);
+  leaf = ConvertToJson(frees_spot);
+  root["spot"] = leaf;
+  ///
+  std::string json_file ;
+  if (shouldUseOldWay) 
+  {
+    Json::FastWriter writer;
+    json_file = writer.write(root);
+    std::cout << json_file << "still json   \n"<< std::endl;
+  } else 
+  {
+    Json::StreamWriterBuilder builder;
+    json_file = Json::writeString(builder, root);
+    std::cout << json_file << std::endl;
+  }
+
+  
+  // char arr[json_file.length() + 1]; 
+  // strcpy(arr, json_file.c_str()); 
+  // char* f = arr;
+  const char* data;
+  curl = curl_easy_init();
+  if(!curl) 
+  {
+    fprintf(stderr, "Error: curl_easy_init failed.\n");
+    goto cleanup;
+  }
+    
+  // headers = curl_slist_append(headers, "POST /api/camera_info HTTP/1.1");
+  // headers = curl_slist_append(headers, "Host: gaz.locator.am/api/camera_info");
+  headers = curl_slist_append(headers, "Accept: application/json");
+  headers = curl_slist_append(headers, "Content-Type: application/json");
+  headers = curl_slist_append(headers, "charset: utf-8");
+
+  // headers = curl_slist_append(headers, "Expect:");
+  // headers = curl_slist_append(headers, "Content-Type: application/json");
+  
+  curl_easy_setopt(curl, CURLOPT_URL,"https://gaz.locator.am/api/camera_info");
+  
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+  // curl_easy_setopt(curl, CURLOPT_HEADER,1L);
+  
+  data = json_file.c_str();
+  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);//post data
+  
+curl_easy_setopt(curl, CURLOPT_WRITEDATA, wfd);
+curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+
+
+  // curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, json_file.length() +1);//info about size of post
+
+  //   curl_easy_setopt(curl, CURLOPT_READDATA, *data);
+  // curl_easy_setopt(curl, CURLOPT_POST, 1L);
+  res = curl_easy_perform(curl);
+  if(res != CURLE_OK) {
+    size_t len = strlen(errbuf);
+    fprintf(stderr, "\nlibcurl: (%d) ", res);/////////////////////
+    if(len)
+      fprintf(stderr, "%s%s", errbuf, ((errbuf[len - 1] != '\n') ? "\n" : ""));
+    fprintf(stderr, "%s\n\n", curl_easy_strerror(res));
+    goto cleanup;
+  }
+
+  // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);//this line is for getting additional helpful info
+  // curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);//this line provides extra info about errors
+
+  
+  
+
+  retcode = TRUE;
+cleanup:
+  curl_slist_free_all(headers);
+  curl_easy_cleanup(curl);
+  // cJSON_Delete(root);
+  // free(json);
+  return retcode;
+}
+
+
+int PostJSON(std::unordered_map<std::string, std::string> exm)
+{
+  FILE *wfd = fopen("foo.txt", "w");
+
+  int retcode = FALSE;
+  CURL *curl = NULL;
+  CURLcode res = CURLE_FAILED_INIT;
+  char errbuf[CURL_ERROR_SIZE] = { 0, };
+  struct curl_slist *headers = NULL;
+  char agent[1024] = { 0, };
+
+//////////////////////////////
+  Json::Value root;
+  constexpr bool shouldUseOldWay = false;
+
+  // root["mac_address"]= "2C:54:91:88:C9:E3";
+  // root["camera_id"] = 1;
+  // root["spot_id"] = 1;
+  // root["license_number"] = "01AI201";
+  // root["confidence"] = 97;
+  // root["time"] = "10-01-2003 16:20:30";
+
+  root = ConvertToJson(exm);
+  ///
+  std::string json_file ;
+  if (shouldUseOldWay) 
+  {
+    Json::FastWriter writer;
+    json_file = writer.write(root);
+    std::cout << json_file << "still json   \n"<< std::endl;
+  } else 
+  {
+    Json::StreamWriterBuilder builder;
+    json_file = Json::writeString(builder, root);
+    std::cout << json_file << std::endl;
+  }
+
+  
+  // char arr[json_file.length() + 1]; 
+  // strcpy(arr, json_file.c_str()); 
+  // char* f = arr;
+
+  const char* data;
+  curl = curl_easy_init();
+  if(!curl) 
+  {
+    fprintf(stderr, "Error: curl_easy_init failed.\n");
+    goto cleanup;
+  }
+    
+  headers = curl_slist_append(headers, "Accept: application/json");
+  headers = curl_slist_append(headers, "Content-Type: application/json");
+  headers = curl_slist_append(headers, "charset: utf-8");
+
+  
+  curl_easy_setopt(curl, CURLOPT_URL,"https://gaz.locator.am/api/camera_info");
+  
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+  // curl_easy_setopt(curl, CURLOPT_HEADER,1L);
+  
+  data = json_file.c_str();
+  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);//post data
+  
+curl_easy_setopt(curl, CURLOPT_WRITEDATA, wfd);
+curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+  res = curl_easy_perform(curl); //1 is here
+
+  if(res != CURLE_OK) {
+    size_t len = strlen(errbuf);
+    fprintf(stderr, "\nlibcurl: (%d) ", res);/////////////////////
+    if(len)
+      fprintf(stderr, "%s%s", errbuf, ((errbuf[len - 1] != '\n') ? "\n" : ""));
+    fprintf(stderr, "%s\n\n", curl_easy_strerror(res));
+    goto cleanup;
+  }
+
+  // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);//this line is for getting additional helpful info
+  // curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);//this line provides extra info about errors
+
+  
+  
+
+  retcode = TRUE;
+cleanup:
+  curl_slist_free_all(headers);
+  curl_easy_cleanup(curl);
+  // cJSON_Delete(root);
+  // free(json);
+  return retcode;
+}
+
+// int main(int argc, char *argv[])
+// {
+  
+//     using ScoreMap = std::unordered_map<std::string, std::string>;
+//     ScoreMap exm;
+//     exm["mac_address"] = "9c:14:63:64:e5:f0";
+//     exm["camera_id"] = "1";
+//     exm["spot_id"] = "1";
+//     exm["license_number"] = "01AI201";
+//     exm["confidence"] = "97";
+//     exm["time"] = "2022-12-02 19:18:00";
+
+//   // data = {
+//   //   'mac_address':mac_addresses[cam_id],
+//   //   "camera_id":str(cam_id), 
+//   //   "spot_id": str(spot_id), 
+//   //   "license_number": prediction, 
+//   //   "confidence":str(conf), 
+//   //   'time':date_time}
+// // mac_addresses = ['9c:14:63:64:ec:c0','9c:14:63:64:e5:f0','9c:14:63:64:e8:ac','9c:14:63:64:eb:0a','9c:14:63:64:e8:af']
+
+//   ScoreMap frees;
+//   ScoreMap spots;
+//   frees["mac_address"] = "9c:14:63:64:e8:ac";
+//   frees["time"] = "02-12-2022 19:18:30";
+
+//   spots["0"] = "Free";
+//   spots["1"] = "Free";
+
+//    if(!PostJSON(frees,spots)) 
+//   {
+//     fprintf(stderr, "Fatal: PostJSON failed.\n");
+//     return EXIT_FAILURE;
+//   }
+
+//   //   //  = {:,  ": }
+//   //   // frees_spot = {: , "1": }
+//   //   // final = {"mac_address": "9c:14:63:64:e8:af", "time ": "10-01-2003 16:20:30", "frees": "{"0": "Free", "1": "Free"}"}
+
+  
+  
+//   if(curl_global_init(CURL_GLOBAL_ALL)) {
+//     fprintf(stderr, "Fatal: The initialization of libcurl has failed.\n");
+//     return EXIT_FAILURE;
+//   }
+
+//   if(atexit(curl_global_cleanup)) {
+//     fprintf(stderr, "Fatal: atexit failed to register curl_global_cleanup.\n");
+//     curl_global_cleanup();
+//     return EXIT_FAILURE;
+//   }
+  
+//   if(!PostJSON(exm)) {
+//     fprintf(stderr, "Fatal: PostJSON failed.\n");
+//     return EXIT_FAILURE;
+//   }
+
+//   return EXIT_SUCCESS;
+// }
+
+// g++ file.cpp -ljsoncpp -lcurl -std=c++11 -o file
