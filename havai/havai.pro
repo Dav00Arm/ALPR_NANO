@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2023-02-15T16:37:49
+# Project created by QtCreator 2023-02-15T16:33:36
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ALPR_UI
+TARGET = havai
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,10 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainui.cpp
+        mainwindow.cpp
 
 HEADERS += \
-        mainui.h
+        mainwindow.h
 
 FORMS += \
-        mainui.ui
+        mainwindow.ui

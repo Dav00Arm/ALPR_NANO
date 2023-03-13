@@ -23,12 +23,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-SOURCES += \
+SOURCES +=  \
         main.cpp \
-        mainui.cpp
+        mainui.cpp \
+        camerathread.cpp
 
 HEADERS += \
-        mainui.h
+        mainui.h \
+        camerathread.h
 
 FORMS += \
         mainui.ui
+
+INCLUDEPATH += /usr/include/opencv4 \
+#               /home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/include/torch/csrc/api/include \
+#               /home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/include/torch \
+#               /home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/include/torch/csrc/api/include/torch \
+
+
+LIBS += -L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_video -lopencv_videoio
+
+#LIBS += -L/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/lib -ltorch -ltorch_cuda -ltorch_cpu -ltorch_python -lc10 -lc10_cuda

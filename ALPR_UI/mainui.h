@@ -15,9 +15,6 @@ public:
     explicit MainUI(QWidget *parent = 0);
     ~MainUI();
 
-private slots:
-    void on_SignUp_button_clicked();
-
 private:
     Ui::MainUI *ui;
 };
