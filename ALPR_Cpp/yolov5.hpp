@@ -6,9 +6,9 @@
 #include <array>
 #include "gpu_envs.hpp"
 
-
 Ort::Session session = CreateSessionCar();
 
+// Main car detection inference class.
 class DetectMultiBackend{
     public:
     Ort::MemoryInfo memory_info = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator,OrtMemTypeCPU);

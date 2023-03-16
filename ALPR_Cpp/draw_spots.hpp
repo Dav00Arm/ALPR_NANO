@@ -6,8 +6,9 @@
 #include <torch/torch.h>
 #include <ATen/ATen.h>
 
+// Class for drawing spots before the program starts.
 
-
+// Check whether lines 12-17 are used 
 std::vector<cv::Point> coords;
 std::vector<std::vector<cv::Point>> spots;
 
@@ -79,12 +80,7 @@ class SpotDrawing{
                 show_image(ill_image);
                 always_draw(ill_image);
             }
-            // ill_image = Mat::zeros(Size(image.cols,image.rows),CV_8UC1);
-            // do_change = true;
-            
-            // double a  = sum(ill_image).val(0);
-            // cout << a << end;
-            // cout << "In the while "<< endl;
+
             if (spots.size() == 1){
                 return_info = spots[0];
                 coords.clear();
@@ -135,7 +131,6 @@ class SpotDrawing{
 
                 }
                 cv::line(img,draw_line[0],first,cv::Scalar(0,0,255),2,cv::LINE_AA);
-            // cout << "AAAAAAAAAAAAAAAAAA";
 
             }
         }
@@ -146,7 +141,7 @@ class SpotDrawing{
     }
 };
 
-
+// Function that reads already drawn spots from .txt file
 std::vector<std::vector<std::vector<cv::Point>>> read_spots(std::string name="spots.txt")
 {
 
@@ -198,16 +193,11 @@ std::vector<std::vector<std::vector<cv::Point>>> read_spots(std::string name="sp
         
             
             }
-    // for(int i=0;i<bboxes.size();i++)
-    // {
-    //     for(int j=0;j<bboxes[i].size();j++) 
-    //     {
-    //         cout << bboxes[i][j]<<endl;
-    //     }
-    // }
+
     return bboxes;
 }
 
+// Shows all camera frames in one grid.
 torch::Tensor show_images(std::vector<cv::Mat> images,int height,int width, int k=3)
 {
     int j = -1;

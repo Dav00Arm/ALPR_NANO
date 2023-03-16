@@ -5,6 +5,7 @@
 
 using namespace std::chrono;
 
+// Convert (x,y,w,h) to (x1,y1,x2,y2).
 torch::Tensor xywh2xyxy(torch::Tensor x)
 {
     torch::Tensor y = x.clone();
@@ -20,7 +21,7 @@ torch::Tensor xywh2xyxy(torch::Tensor x)
     return y;
 }
 
-
+// Scaling coordinates
 torch::Tensor scale_coords(std::vector<double> img1_shape,torch::Tensor coords,std::vector<double> img0_shape){
     
     double gain = std::min((double) (img1_shape[0] / img0_shape[0]),double(img1_shape[1] / img0_shape[1]));
@@ -36,6 +37,7 @@ torch::Tensor scale_coords(std::vector<double> img1_shape,torch::Tensor coords,s
     return coords;
 }
 
+// Crop image with given coordinates.
 cv::Mat box_crop(cv::Mat img,torch::Tensor coords){
     int maximum_x = img.cols;
     int maximum_y = img.rows;
@@ -46,7 +48,7 @@ cv::Mat box_crop(cv::Mat img,torch::Tensor coords){
     return img(cv::Range(y_min,y_max),cv::Range(x_min,x_max));
 }
 
-
+// NMS for car detection.
 std::vector<torch::Tensor> non_max_suppression(std::vector<std::vector<float>> predictions,
                         float conf_thres=0.25,
                         float iou_thres=0.45,

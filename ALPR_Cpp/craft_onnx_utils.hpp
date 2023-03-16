@@ -6,9 +6,11 @@
 
 using namespace std::chrono;
 
+// Setup for Craft and Refiner infernence.
+
 //PATHS OF CRAFT AND REFINER
-char* craft = "./models/craft_cpu.onnx";
-char* refinet = "./models/refiner_cpu.onnx";
+const char* craft = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/craft_cpu.onnx";
+const char* refinet = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/refiner_cpu.onnx";
 
 //SESSION INFO
 Ort::MemoryInfo memory_info = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator,OrtMemTypeCPU);

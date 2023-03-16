@@ -1,9 +1,6 @@
 #include <torch/torch.h>
 
-// class LocalizationNetwork : torch::nn::Module{
-//     int F = 20;
-
-// };
+// OCR model parts. Some of this functions are not used.
 torch::nn::Conv2dOptions
 create_conv_options(int64_t in_planes, int64_t out_planes, int64_t kerner_size,
                     int64_t stride = 1, int64_t padding = 0, int64_t groups = 1,
@@ -34,10 +31,6 @@ torch::nn::MaxPool2dOptions create_max_options(int64_t kerner_size,
 torch::Tensor linalg_norm(torch::Tensor *ptr_tensor, int dim = 0, bool keepdim = false) {
     return torch::sqrt(torch::sum(torch::pow(*ptr_tensor, 2), {dim}, keepdim));
 }
-
-
-
-
 
 class LocalizationNetwork
 {
@@ -221,58 +214,3 @@ class TPS_SpatialTransformerNetwork{
         }
 
 };
-
-// void LocalizationNetwork(){
-//     torch::nn::Sequential conv(
-//     // Layer 1
-//     torch::nn::Conv2d(
-//         torch::nn::Conv2dOptions(1, 64, 3).stride(3).padding(1).bias(false)),
-//     torch::nn::BatchNorm2d(64),
-//     torch::nn::ReLU(true),
-//     //Layer 2
-//     torch::max_pool2d({2,2}));
-
-// }
-
-    
-
-// nn::Sequential discriminator(
-//   // Layer 1
-//   nn::Conv2d(
-//       nn::Conv2dOptions(1, 64, 4).stride(2).padding(1).bias(false)),
-//   nn::LeakyReLU(nn::LeakyReLUOptions().negative_slope(0.2)),
-//   // Layer 2
-//   nn::Conv2d(
-//       nn::Conv2dOptions(64, 128, 4).stride(2).padding(1).bias(false)),
-//   nn::BatchNorm2d(128),
-//   nn::LeakyReLU(nn::LeakyReLUOptions().negative_slope(0.2)),
-//   // Layer 3
-//   nn::Conv2d(
-//       nn::Conv2dOptions(128, 256, 4).stride(2).padding(1).bias(false)),
-//   nn::BatchNorm2d(256),
-//   nn::LeakyReLU(nn::LeakyReLUOptions().negative_slope(0.2)),
-//   // Layer 4
-//   nn::Conv2d(
-//       nn::Conv2dOptions(256, 1, 3).stride(1).padding(0).bias(false)),
-//   nn::Sigmoid());
-
-// class TPS_SpatialTransformerNetwork : torch::nn::Module{
-//     int F = 20;
-//     std::vector<int> I_size = {32,100};
-//     auto LocalizationNetwork = LocalizationNetwork(F, 1);
-
-// };
-
-// int main(){
-    // LocalizationNetwork a;
-    // torch::Tensor tensor = torch::ones({5,198});
-    // std::cout << tensor.sizes()[1]<<std::endl;
-    // // torch::Tensor b = tensor.index({1,torch::indexing::Slice(0,torch::indexing::None)});
-    // std::vector<int> sz;
-    // sz.push_back(32);
-    // sz.push_back(100);
-    // int F = 2;
-    // TPS_SpatialTransformerNetwork a(20,sz,sz,1);
-    // // a();
-    // return 0;
-// }

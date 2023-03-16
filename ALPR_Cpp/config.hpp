@@ -10,6 +10,8 @@
 #include "ocr.hpp"
 #include "client.hpp"
 
+// All configurations for the program. 
+
 double max_cosine_distance = 0.5;
 // int nn_budget = -1;
 double nms_max_overlap = 1.0;

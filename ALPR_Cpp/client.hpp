@@ -10,6 +10,12 @@
 #define FALSE 0
 // #undef TRUE
 #define TRUE 1
+
+/*
+    This file's functions are for precossing and sending data 
+    to server.
+*/
+// convert data from unordered map to json.
 Json::Value ConvertToJson(std::unordered_map<std::string, std::string> map)
 {
     Json::Value json;
@@ -22,6 +28,7 @@ Json::Value ConvertToJson(std::unordered_map<std::string, std::string> map)
     return json;
 }
 
+// Send data about free spots to server.
 int PostJSON(std::unordered_map<std::string, std::string> frees,std::unordered_map<std::string, std::string> frees_spot)
 {
   FILE *wfd = fopen("foo.txt", "w");
@@ -124,7 +131,7 @@ cleanup:
   return retcode;
 }
 
-
+// Send data about new cars's license plate to server.
 int PostJSON(std::unordered_map<std::string, std::string> exm)
 {
   FILE *wfd = fopen("foo.txt", "w");
@@ -215,65 +222,3 @@ cleanup:
   // free(json);
   return retcode;
 }
-
-// int main(int argc, char *argv[])
-// {
-  
-//     using ScoreMap = std::unordered_map<std::string, std::string>;
-//     ScoreMap exm;
-//     exm["mac_address"] = "9c:14:63:64:e5:f0";
-//     exm["camera_id"] = "1";
-//     exm["spot_id"] = "1";
-//     exm["license_number"] = "01AI201";
-//     exm["confidence"] = "97";
-//     exm["time"] = "2022-12-02 19:18:00";
-
-//   // data = {
-//   //   'mac_address':mac_addresses[cam_id],
-//   //   "camera_id":str(cam_id), 
-//   //   "spot_id": str(spot_id), 
-//   //   "license_number": prediction, 
-//   //   "confidence":str(conf), 
-//   //   'time':date_time}
-// // mac_addresses = ['9c:14:63:64:ec:c0','9c:14:63:64:e5:f0','9c:14:63:64:e8:ac','9c:14:63:64:eb:0a','9c:14:63:64:e8:af']
-
-//   ScoreMap frees;
-//   ScoreMap spots;
-//   frees["mac_address"] = "9c:14:63:64:e8:ac";
-//   frees["time"] = "02-12-2022 19:18:30";
-
-//   spots["0"] = "Free";
-//   spots["1"] = "Free";
-
-//    if(!PostJSON(frees,spots)) 
-//   {
-//     fprintf(stderr, "Fatal: PostJSON failed.\n");
-//     return EXIT_FAILURE;
-//   }
-
-//   //   //  = {:,  ": }
-//   //   // frees_spot = {: , "1": }
-//   //   // final = {"mac_address": "9c:14:63:64:e8:af", "time ": "10-01-2003 16:20:30", "frees": "{"0": "Free", "1": "Free"}"}
-
-  
-  
-//   if(curl_global_init(CURL_GLOBAL_ALL)) {
-//     fprintf(stderr, "Fatal: The initialization of libcurl has failed.\n");
-//     return EXIT_FAILURE;
-//   }
-
-//   if(atexit(curl_global_cleanup)) {
-//     fprintf(stderr, "Fatal: atexit failed to register curl_global_cleanup.\n");
-//     curl_global_cleanup();
-//     return EXIT_FAILURE;
-//   }
-  
-//   if(!PostJSON(exm)) {
-//     fprintf(stderr, "Fatal: PostJSON failed.\n");
-//     return EXIT_FAILURE;
-//   }
-
-//   return EXIT_SUCCESS;
-// }
-
-// g++ file.cpp -ljsoncpp -lcurl -std=c++11 -o file

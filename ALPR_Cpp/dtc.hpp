@@ -5,6 +5,7 @@
 
 DetectMultiBackend model;
 
+// Prepare input image for ONNX inference. 
 std::vector<float> onnxInput(cv::Mat img){
     img.convertTo(img,CV_32F,1.0/ 255);
     cv::Mat channels[3];
@@ -19,6 +20,7 @@ std::vector<float> onnxInput(cv::Mat img){
 
 }
 
+// Main car detection call function.
 std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>> car_detection_yolo_one_id(cv::Mat image, int stride,bool pt,int imgsz)
 {
     int bs = 1;
@@ -71,43 +73,3 @@ std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>> car
     }
     return {out, draw_boxes};
 }
-
-
-// int main()
-// {   
-//     cv::Mat img = cv::imread("traffic.webp");
-//     // char* path = "./yolov5_cpu.onnx";
-//     cv::resize(img,img,cv::Size(1280,720),cv::INTER_AREA);
-//     // cv::imshow("Original",img);
-//     // cv::waitKey(0);
-//     car_detection_yolo_one_id(img,32,false,320);
-
-//     return 0;
-// }
-//     // while(true){
-//     // torch::Tensor boxes = torch::zeros({12000,4});
-//     // torch::Tensor output_box = torch::zeros(12000);
-    
-//     // auto start = high_resolution_clock::now();
-
-//     // for(int it=0; it < 12000; it+=2){
-//     //     boxes[it][0] = output_box[it];
-//     //     boxes[it][1] = output_box[it];
-//     //     boxes[it][2] = output_box[it];
-//     //     boxes[it][3] = output_box[it];
-//     // }
-//     // // std::cout<<ar<<std::endl;
-//     // // // for(int i=0; i<=12000; i++){
-//     // // //     i = (torch::Tensor)i;
-//     // // //     torch::cat({ i, ar }, 0);
-//     // // // }
-//     // auto stop = high_resolution_clock::now();
-//     // auto duration = duration_cast<microseconds>(stop - start);
-//     // std::cout << "Time taken by function: "<< duration.count()<< " seconds" << std::endl;
-//     // }
-//     // a =  a.reshape({25,80});
-//     // std::cout << a.index({torch::indexing::Slice(0,torch::indexing::None),torch::indexing::Slice(5,torch::indexing::None)})<<std::endl;
-//     // a.index({torch::indexing::Slice(0,torch::indexing::None),torch::indexing::Slice(5,torch::indexing::None)}) = a.index({torch::indexing::Slice(0,torch::indexing::None),torch::indexing::Slice(5,torch::indexing::None)}) * a.index({torch::indexing::Slice(0,torch::indexing::None),torch::indexing::Slice(4,5)});
-//     // std::cout << a.index({torch::indexing::Slice(0,torch::indexing::None),torch::indexing::Slice(5,torch::indexing::None)})<<std::endl;
-//     // std::cout << a.index({torch::indexing::Slice(0,torch::indexing::None),torch::indexing::Slice(5,torch::indexing::None)}).max(1,true)<<std::endl;
-// }

@@ -1,12 +1,15 @@
 #include "onnxruntime_cxx_api.h"
 
+// Demo code for ONNX inference with GPUs.
+
 Ort::Session CreateSessionCar(){
 
     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "test");
-    const char* model_path = "./models/yolov5n_cpu.onnx";
+    // const char* model_path = "models/yolov5n_cpu.onnx";
+    const char* model_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/yolov5n_cpu.onnx";
 
     Ort::SessionOptions session_options;    
-    session_options.SetIntraOpNumThreads(1);
+    // session_options.SetIntraOpNumThreads(1);
     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
     OrtCUDAProviderOptions cuda_options;
     cuda_options.device_id = 0;
@@ -17,6 +20,6 @@ Ort::Session CreateSessionCar(){
     cuda_options.cudnn_conv_algo_search = OrtCudnnConvAlgoSearch::EXHAUSTIVE;
     cuda_options.do_copy_in_default_stream = 1;
     cuda_options.default_memory_arena_cfg = nullptr;
-    session_options.AppendExecutionProvider_CUDA(cuda_options);
+    // session_options.AppendExecutionProvider_CUDA(cuda_options);
     return Ort::Session(env, model_path, session_options);
 }

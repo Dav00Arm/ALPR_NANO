@@ -6,6 +6,8 @@
 #include "predictor.hpp"
 using namespace std::chrono;
 
+
+// Draw license plates' prediction box. 
 void draw_plates(cv::Mat image, std::vector<std::vector<std::vector<int>>> bboxes){
     // std::cout<<"Image size"<<std::endl<<image.cols<<" "<<image.rows<<std::endl;
     // std::cout<<"all boxes---------------------"<<std::endl;
@@ -28,6 +30,7 @@ void draw_plates(cv::Mat image, std::vector<std::vector<std::vector<int>>> bboxe
     }
 }
 
+// License plate detection main call function
 std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> 
     detect_plate_onnx_id(cv::Mat cur_frame, std::vector<cv::Mat> frames, std::vector<std::vector<std::vector<int>>> car_boxes){
     

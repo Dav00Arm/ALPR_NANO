@@ -4,17 +4,25 @@
 #include <chrono>
 #include <unordered_map>
 #include <opencv2/opencv.hpp>
+
+/*
+    This file's content is for checking whether the license plate is
+    in drawn zone. If yes contiune and crop lines.
+*/
+
+// Point type for drawing custom qarankyunner.
 struct point {
     int x, y;
 };
- 
+
+// line type for drawing custom qarankyunner.
 struct line {
     point p1, p2;
 };
 
+// Check whether point is on the line or not
 bool onLine(line l1, point p)
 {
-    // Check whether p is on the line or not
     if (p.x <= std::max(l1.p1.x, l1.p2.x)
         && p.x <= std::min(l1.p1.x, l1.p2.x)
         && (p.y <= std::max(l1.p1.y, l1.p2.y)
@@ -24,6 +32,7 @@ bool onLine(line l1, point p)
     return false;
 }
 
+// Get the direction of lines (chem hishum xia petq) 
 int direction(point a, point b, point c)
 {
     int val = (b.y - a.y) * (c.x - b.x)
@@ -42,7 +51,8 @@ int direction(point a, point b, point c)
     // Clockwise direction
     return 1;
 }
- 
+
+// Check the intersection of qarankyuns.
 bool isIntersect(line l1, line l2)
 {
     // Four direction for two lines and points of other line
@@ -70,6 +80,7 @@ bool isIntersect(line l1, line l2)
     return false;
 }
 
+// Check if point is in polygon
 bool checkInsidePoint(std::vector<point> poly, point p)
 {
     // When polygon has less than 3 edge, it is not polygon
@@ -95,7 +106,7 @@ bool checkInsidePoint(std::vector<point> poly, point p)
     // When count is odd
     return count & 1;
 }
-
+// Convert std::vector<cv::Point> to std::vector<point>. 
 std::vector<point> convert_polygon(std::vector<cv::Point> box){
 
     std::vector<point> polygon = {{box[0].x, box[0].y}, {box[1].x, box[1].y},
@@ -104,6 +115,7 @@ std::vector<point> convert_polygon(std::vector<cv::Point> box){
     return polygon;
 }
 
+// Convert std::vector<std::vector<int>> to std::vector<point>. 
 std::vector<point> convert_polygon(std::vector<std::vector<int>> box){
     std::vector<point> polygon = {{box[0][0], box[0][1]}, {box[1][0], box[0][1]},
                                   {box[1][0], box[1][1]}, {box[0][0], box[1][1]}};
@@ -111,6 +123,7 @@ std::vector<point> convert_polygon(std::vector<std::vector<int>> box){
     return polygon;
 }
 
+// Check if license plate is in drawn qarankyun box (std::vector<cv::Point>). 
 bool checkInside(std::vector<cv::Point> spot, std::vector<std::vector<int>> plate_coords){
     std::vector<point> spot_point = convert_polygon(spot);
     std::vector<point> plate_point = convert_polygon(plate_coords);
@@ -123,6 +136,7 @@ bool checkInside(std::vector<cv::Point> spot, std::vector<std::vector<int>> plat
     return true;
 }
 
+// Check if license plate is in drawn qarankyun box (std::vector<std::vector<int>>). 
 bool checkInside(std::vector<std::vector<int>> spot, std::vector<std::vector<int>> plate_coords){
     std::vector<point> spot_point = convert_polygon(spot);
     std::vector<point> plate_point = convert_polygon(plate_coords);
@@ -134,21 +148,3 @@ bool checkInside(std::vector<std::vector<int>> spot, std::vector<std::vector<int
     }
     return true;
 }
-
-// Driver code
-// int main(){
-//     std::vector<cv::Point> polygon_vec = { cv::Point(255, 328), cv::Point(372, 328), cv::Point( 372, 375 ), cv::Point( 255, 375 ) };
-//     point p = { 263, 338 };
-//     std::vector<point> polygon = convert_polygon(polygon_vec); 
-//     std::cout<<polygon[0].x<<" "<<polygon[0].y<<std::endl;
-//     std::cout<<checkInsidePoint(polygon, p)<<std::endl;
-// }
-
-
-// std::cout<<"spot_point:\n";
-            // for(int i=0; i<4; i++){
-            //     std::cout<<spot_point[i].x<<" "<<spot_point[i].y;
-            // }
-            // std::cout<<std::endl;
-            // std::cout<<"plate point"<<std::endl;
-            // std::cout<<plate_point[i].x<<" "<<plate_point[i].y<<std::endl;

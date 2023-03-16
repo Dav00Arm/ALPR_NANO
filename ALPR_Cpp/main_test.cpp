@@ -2,16 +2,13 @@
 #include <QApplication>
 #include <QtWidgets>
 
-
-
-// user_config yaml
-
+// MAIN function
 int main(int argc, char *argv[])
 {   
     // UI
     QApplication a(argc, argv);
     MainUI w;
-
+    
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
     int height = screenGeometry.height();
@@ -126,6 +123,25 @@ int main(int argc, char *argv[])
     camera4CheckBox->move(210, 274);
 
 
+    QTableWidget *table = w.findChild<QTableWidget*>("WhiteListTable");
+    QPushButton *addLine = w.findChild<QPushButton*>("AddLine");
+    addLine->move(width/2-130,420);
+    table->move(width/2-130,10);
+    table->setRowCount(0);
+    table->setColumnCount(2);
+    table->setColumnWidth(0, 140);
+    table->setColumnWidth(1, 120);
+
+    table->resize(300, 400);
+    table->setHorizontalHeaderLabels(QStringList() << "Name" << "License Number");
+
+    QPushButton *saveButton = w.findChild<QPushButton*>("SaveButton");
+    saveButton->setFixedSize(60,30);
+    saveButton->move(5, 300);
+
+    QPushButton *homeButton = w.findChild<QPushButton*>("HomeButton");
+    homeButton->setFixedSize(60,30);
+    homeButton->move(70, 300);
 
     w.show();
 

@@ -2,6 +2,7 @@
 #include <torch/torch.h>
 #include <opencv2/opencv.hpp>
 
+// Transformation for plate detection. 
 torch::Tensor Transform(cv::Mat image){
     cv::Mat cv_mat;
     cv::resize(image, cv_mat, {300,300}, 0,0,1);

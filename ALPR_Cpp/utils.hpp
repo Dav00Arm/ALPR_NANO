@@ -1,10 +1,12 @@
 #include "check_polygon.hpp"
 #include <opencv2/opencv.hpp>
 
+// Get current time.
 int time_now(){
     return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
+// Check if license plate box is in drawn zone.
 std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
     std::unordered_map<int, std::string>,std::vector<std::vector<std::vector<std::vector<int>>>>>
     check_box(cv::Mat frame, int cam_id, std::vector<std::vector<cv::Point>> spots, 
@@ -53,17 +55,18 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
                     }
                 }
                 // Draw the zone 
-                if(plate_zone[cam_id][i].size() != 0){
-                    cv::Point p1(plate_zone[cam_id][i][0][0], plate_zone[cam_id][i][0][1]);
-                    cv::Point p2(plate_zone[cam_id][i][1][0], plate_zone[cam_id][i][1][1]);
-                    cv::rectangle(frame, p1, p2, cv::Scalar(0,255,255), 2);
-                }
+                // if(plate_zone[cam_id][i].size() != 0){
+                //     cv::Point p1(plate_zone[cam_id][i][0][0], plate_zone[cam_id][i][0][1]);
+                //     cv::Point p2(plate_zone[cam_id][i][1][0], plate_zone[cam_id][i][1][1]);
+                //     cv::rectangle(frame, p1, p2, cv::Scalar(0,255,255), 2);
+                // }
             }
         }
     }
     return {spot_dict, plate_read, current_spot_dict, plate_zone};
 }
 
+// Splits string with given delimeter (the same as python split()).
 std::vector<std::string> split (std::string s, std::string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     std::string token;
@@ -79,6 +82,7 @@ std::vector<std::string> split (std::string s, std::string delimiter) {
     return res;
 }
 
+// Get current date and time.
 const std::string currentDateTime() {
     time_t     now = time(0);
     tm* tstruct;
@@ -108,6 +112,7 @@ const std::string currentDateTime() {
     return time_string;
 }
 
+// Create "blank" to fill with data to send to the server.
 std::unordered_map<std::string, std::string> prepare_sending_data(std::string mac_address, std::string camera_id,
     std::string spot_id, std::string license_number, std::string confidence, std::string dtime){
     std::unordered_map<std::string, std::string> data;

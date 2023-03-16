@@ -2,6 +2,9 @@
 #include <chrono>
 using namespace std::chrono;
 
+// This file's functions are for Craft (cropping lines) and refiner's part. 
+
+// Normalize mean and variance of input image.
 torch::Tensor normalizeMeanVariance(cv::Mat image){
     torch::Tensor tensor_image = torch::from_blob(image.data, { image.rows, image.cols, image.channels() }, at::kByte);
     tensor_image = tensor_image.permute({ 2,0,1 });
@@ -16,6 +19,7 @@ torch::Tensor normalizeMeanVariance(cv::Mat image){
     return tensor_image;
 }
 
+// Resize input image.
 std::vector<float> resize_aspect_ratio(cv::Mat img){
     float height = img.rows, width = img.cols;
     float ratio_w, ratio_h;
@@ -32,6 +36,7 @@ std::vector<float> resize_aspect_ratio(cv::Mat img){
     return out;
 }
 
+// Call normalizeMeanVariance and resize_aspect_ratio
 std::tuple<torch::Tensor, float, float> craft_preprocess(cv::Mat image){
     std::vector<float> ratios = resize_aspect_ratio(image);
     cv::Mat img_resized;
@@ -46,6 +51,7 @@ std::tuple<torch::Tensor, float, float> craft_preprocess(cv::Mat image){
     return {x, ratio_h, ratio_w};
 }
 
+// A part of postprocessing 
 std::vector<torch::Tensor> getDetBoxes_core(torch::Tensor textmap_, torch::Tensor linkmap_, float text_threshold, float link_threshold, float low_text){
 
     int img_h = textmap_.size(0);
@@ -55,7 +61,7 @@ std::vector<torch::Tensor> getDetBoxes_core(torch::Tensor textmap_, torch::Tenso
     
     torch::Tensor text_score = torch::ones({50,50}, torch::TensorOptions().dtype(torch::kFloat32));
     torch::Tensor link_score = torch::ones({50,50}, torch::TensorOptions().dtype(torch::kFloat32));
-
+    // Can be optimized
     for(int i=0; i<50; i++){
         for(int j=0; j<50; j++){
             if(textmap_[i][j].item<float>() < low_text){
@@ -75,6 +81,8 @@ std::vector<torch::Tensor> getDetBoxes_core(torch::Tensor textmap_, torch::Tenso
     
 
     //Clipping
+    
+    // Can be optimized
     torch::Tensor to_clip = text_score + link_score, text_score_comb = torch::zeros({50,50}, torch::TensorOptions().dtype(torch::kFloat32));
     for(int i=0; i<50; i++){
         for(int j=0; j<50; j++){
@@ -208,6 +216,8 @@ std::vector<torch::Tensor> adjustResultCoordinates(std::vector<torch::Tensor> po
     return polys;
 }
 
+
+// Call getDetBoxes and adjust coordinates as they were normalized.
 std::vector<torch::Tensor> get_boxes(torch::Tensor score_text, torch::Tensor score_link, float text_threshold, float link_threshold, float low_text, float ratio_w, float ratio_h){
     std::vector<torch::Tensor> boxes;
     boxes = getDetBoxes(score_text, score_link, text_threshold, link_threshold, low_text);
@@ -217,6 +227,8 @@ std::vector<torch::Tensor> get_boxes(torch::Tensor score_text, torch::Tensor sco
     return boxes;
 }
 
+
+// Main craft inference function.
 std::vector<torch::Tensor> predict_craft(cv::Mat image){
 
     //CRAFT
@@ -283,6 +295,7 @@ std::vector<torch::Tensor> predict_craft(cv::Mat image){
     return boxes;
 }
 
+// Crop image with given coordinates.
 cv::Mat cropping_image(cv::Mat img, torch::Tensor pts){
 
     int maximum_y = img.rows;
@@ -311,12 +324,12 @@ cv::Mat cropping_image(cv::Mat img, torch::Tensor pts){
     int y_max = std::min({y+h, maximum_y});
 
     cv::Mat cropped = img(cv::Range(y_min, y_max), cv::Range(x_min, x_max));
-    // cv::imshow("cropped", cropped);
-    // cv::waitKey(0); 
+
     cv::cvtColor(cropped,cropped,cv::COLOR_BGR2GRAY);
     return cropped; 
 }
 
+// Craft call function.
 std::vector<std::vector<cv::Mat>> crop_lines(cv::Mat image){
     std::vector<std::vector<cv::Mat>> all_results;
     if(image.rows == 0){
@@ -334,28 +347,3 @@ std::vector<std::vector<cv::Mat>> crop_lines(cv::Mat image){
     }
     return all_results;
 }
-
-
-
-// int main(){
-//     int c = 0;
-//     cv::Mat image = cv::imread("square.jpg");
-//     // for(int i=0; i<100; i++){
-//     //     auto start = high_resolution_clock::now();
-//     // for(int i=0; i<100; i++){
-//     //     auto start = std::chrono::high_resolution_clock::now();
-//     std::vector<std::vector<cv::Mat>> res = crop_lines(image);
-//     //     auto end = std::chrono::high_resolution_clock::now();
-//     //     std::chrono::duration< double > fs = end - start;
-//     //     std::chrono::milliseconds d = std::chrono::duration_cast< std::chrono::milliseconds >( fs );
-//     //     std::cout<<d.count()<<" milliseconds"<<std::endl;
-//     // }
-//     // auto stop = high_resolution_clock::now();
-
-//     // auto duration = duration_cast<microseconds>(stop - start);
-
-//     // std::cout << "Time taken by function: "
-//     //     << duration.count() << " microseconds" << std::endl;
-// // }
-//     return 0; 
-// }

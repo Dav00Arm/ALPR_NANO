@@ -8,7 +8,7 @@
 #include <tuple>
 #include <cmath>
 
-
+// Augment image for car detection
 std::tuple<cv::Mat,std::vector<float>,float,float> letterbox(cv::Mat im, int new_shape=640,bool auto_=true, bool scaleFill=false, bool scaleup=true, int stride=32){
     std::vector<float> shape;
     std::vector<float> new_shapes;
@@ -56,9 +56,5 @@ std::tuple<cv::Mat,std::vector<float>,float,float> letterbox(cv::Mat im, int new
     int right = int(std::round(dw+0.1));
     cv::copyMakeBorder(im,im,top,bottom,left,right,cv::BORDER_CONSTANT,cv::Scalar(114,114,114));
      
-    return {im,ratio,dw,dh};
-
-
-
-    
+    return {im,ratio,dw,dh};    
 }

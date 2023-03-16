@@ -3,6 +3,8 @@
 #include <torch/torch.h>
 #include <opencv2/opencv.hpp>
 
+
+// NMS for plate detection output.
 torch::Tensor hard_nms(torch::Tensor box_scores, int top_k=-1, int candidate_size=200){
     torch::Tensor scores = box_scores.index({torch::indexing::Slice(0, torch::indexing::None, 1), -1});
     std::vector<int> picked;

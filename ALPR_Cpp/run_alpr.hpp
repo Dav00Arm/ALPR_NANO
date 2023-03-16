@@ -1,6 +1,7 @@
 #include "config.hpp"
 #include <QLabel>
 
+// Convert cv::Mat to QImage for UI visualization 
 QImage MatToQImage(cv::Mat const& mat)
 {
     // Convert the color format of the image.
@@ -29,6 +30,7 @@ QImage MatToQImage(cv::Mat const& mat)
     return qimage.copy();
 }
 
+// Main ALPR function. The whole logic of recognition.  
 void alpr(std::vector<QLabel*> labels){
     std::ifstream file;
     file.open(spot_config);
