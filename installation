@@ -1,0 +1,21 @@
+Jsoncpp
+sudo apt-get install libjsoncpp-dev
+
+Curl
+sudo apt install curl
+sudo apt -y install curl
+sudo apt-get install libcurl4-openssl-dev
+
+QTCreator
+sudo apt-get install qtcreator
+
+Cmake 
+sudo ./configure
+sudo make -j8
+sudo make install -j8
+hash -r
+
+Additional information
+CMakeLists.txt works. 
+
+QT5
