@@ -4,7 +4,7 @@
 #include "futrextr.hpp"
 
 
-
+// Resize and normalize input image for OCR.
 torch::Tensor ResizeNormalize(cv::Mat image){
 
     cv::resize(image, image, cv::Size(100,32), cv::INTER_CUBIC);
@@ -15,6 +15,7 @@ torch::Tensor ResizeNormalize(cv::Mat image){
     return tensor_image_;
 }
 
+// Please review this class.
 class AlignCollate{
     private:
     int imgH = 32, imgW = 100;
@@ -27,6 +28,8 @@ class AlignCollate{
         out_image = tensor_image.unsqueeze(0);
     }
 };
+
+// Main ocr call and inference function
 std::tuple<std::string,float> ocr_run(std::vector<cv::Mat> lines,torch::jit::Module model,AttnLabelConverter converter){
     // Main ocr inference
     std::string plate = "";
