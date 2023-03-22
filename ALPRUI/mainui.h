@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include <vector>
 #include <QLabel>
-#include "camerathread.h"
+#include <unordered_map>
+// #include "camerathread.h"
 
 // Main UI class declaration.
 
@@ -18,7 +19,10 @@ class MainUI : public QMainWindow
 
 public:
     explicit MainUI(QWidget *parent = 0);
-    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> whiteListData;
+    int currentList = -1;
+    std::vector<std::string> names;
+    std::vector<std::string> urls;
+
 
     ~MainUI();
 
@@ -27,6 +31,9 @@ private slots:
     
     void on_cameraSettings_clicked();
     
+    void loadWhiteList(std::string index);
+    void clearWhiteList();
+    void SaveWhiteList();
     void on_AddLine_clicked();
 
     void on_HomeButton_clicked();
@@ -38,9 +45,12 @@ private slots:
     
     void on_SaveButton_clicked();
 
+    void on_SignIn_button_clicked();
+
+    void on_resetLogin_clicked();
+
 private:
     Ui::MainUI *ui;
-
 
 };
 

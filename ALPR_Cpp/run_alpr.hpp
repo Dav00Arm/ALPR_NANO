@@ -8,7 +8,7 @@ QImage MatToQImage(cv::Mat const& mat)
     cv::Mat mat_bgr;
     if (mat.channels() == 1)
     {
-        cv::cvtColor(mat, mat_bgr, cv::COLOR_GRAY2BGR);
+        cv::cvtColor(mat, mat_bgr, cv::COLOR_GRAY2BGR); 
     }
     else if (mat.channels() == 3)
     {
@@ -31,7 +31,7 @@ QImage MatToQImage(cv::Mat const& mat)
 }
 
 // Main ALPR function. The whole logic of recognition.  
-void alpr(std::vector<QLabel*> labels){
+void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::vector<std::string> capture_source){
     std::ifstream file;
     file.open(spot_config);
     cv::Size label_size(labels[0]->width(), labels[0]->height());
@@ -91,7 +91,7 @@ void alpr(std::vector<QLabel*> labels){
     std::unordered_map<std::string, std::string> changed, prev_changed;
     std::vector<std::vector<std::string>> last_preds;
 
-    for(int camera=0; camera<bboxes.size(); camera++){
+    for(int camera=0; camera<capture_source.size(); camera++){
         std::cout<<"Camera "<<camera<<std::endl;
         fix_times.push_back({});
         last_preds.push_back({});
@@ -206,6 +206,15 @@ void alpr(std::vector<QLabel*> labels){
                         }
                     }
                 }
+                cv::Point org(25, 50);
+                cv::Scalar color(209, 121, 27);
+                double fontScale = 1.5;
+                int thickness = 2;
+                int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+
+                putText(frame, cam_names[cam_id], org, fontFace, fontScale, color, thickness);
+                
+                // cv::putText(frame, cam_names[cam_id], cv::Point(50, 50), 2, (0,0,255), 5);
                 cv::Mat resized_frame;
                 cv::resize(frame, resized_frame, label_size, cv::INTER_AREA);
                 QImage qImage = MatToQImage(resized_frame);

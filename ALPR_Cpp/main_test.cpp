@@ -19,31 +19,33 @@ int main(int argc, char *argv[])
 
     //Center the Sign up box
     QWidget *CentralWidget = w.findChild<QWidget*>("CenterWidget"); //getting the widget by its name
+    QWidget *CentralWidget2 = w.findChild<QWidget*>("CenterWidget_2"); //getting the widget by its name
     int x = (width - CentralWidget->width()) / 2;
     int y = (height - CentralWidget->height()) / 2;
     CentralWidget->move(x, y);
+    CentralWidget2->move(x, y);
     QLabel *label_1 = w.findChild<QLabel*>("cam1"); 
     QLabel *label_2 = w.findChild<QLabel*>("cam2"); 
     QLabel *label_3 = w.findChild<QLabel*>("cam3"); 
     QLabel *label_4 = w.findChild<QLabel*>("cam4"); 
 
-    label_1->move(35, 0); 
+    label_1->move(0, 0); 
     label_1->resize(width/2-35, height/2-35);
     
-    label_2->move(35+width/2-35, 0); 
+    label_2->move(width/2-35, 0); 
     label_2->resize(label_1->width(), label_1->height());
     
-    label_3->move(35, height/2-35); 
+    label_3->move(0, height/2-35); 
     label_3->resize(label_1->width(), label_1->height());
     
-    label_4->move(35+width/2-35, height/2-35); 
+    label_4->move(width/2-35, height/2-35); 
     label_4->resize(label_1->width(), label_1->height());
 
     QPushButton *settings = w.findChild<QPushButton*>("cameraSettings");
     settings->setIcon(QIcon("/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/images/settings.png")); // set the icon
     settings->setIconSize(QSize(30, 30)); // set the icon size      
     settings->setFixedSize(30, 30); // set the same width and height
-    settings->move(0, 0);
+    settings->move(width-60, 0);
 
     QLabel *camera1Label = w.findChild<QLabel*>("camera1Label");
     QLabel *camera2Label = w.findChild<QLabel*>("camera2Label");
@@ -125,8 +127,17 @@ int main(int argc, char *argv[])
 
     QTableWidget *table = w.findChild<QTableWidget*>("WhiteListTable");
     QPushButton *addLine = w.findChild<QPushButton*>("AddLine");
-    addLine->move(width/2-130,420);
-    table->move(width/2-130,10);
+    QLabel *AddLineWarning = w.findChild<QLabel*>("AddLineWarning"); 
+    QLabel *CheckBoxWarning = w.findChild<QLabel*>("CheckBoxWarning"); 
+    QLabel *WhiteListLabel = w.findChild<QLabel*>("WhiteListLabel"); 
+
+    addLine->move(width/2-130,450);
+    
+    AddLineWarning->move(width/2-30, 450);
+    CheckBoxWarning->move(5, 360);
+    WhiteListLabel->move(width/2-130,10);
+
+    table->move(width/2-130,40);
     table->setRowCount(0);
     table->setColumnCount(2);
     table->setColumnWidth(0, 140);
@@ -140,9 +151,12 @@ int main(int argc, char *argv[])
     saveButton->move(5, 300);
 
     QPushButton *homeButton = w.findChild<QPushButton*>("HomeButton");
-    homeButton->setFixedSize(60,30);
+    homeButton->setFixedSize(70,30);
     homeButton->move(70, 300);
-
+    
+    QPushButton *resetLogin = w.findChild<QPushButton*>("resetLogin");
+    resetLogin->setFixedSize(60,30);
+    resetLogin->move(145, 300);
     w.show();
 
     return a.exec();
