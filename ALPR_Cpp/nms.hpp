@@ -1,7 +1,5 @@
 #include <vector>
 #include <tuple>
-#include <torch/torch.h>
-#include <opencv2/opencv.hpp>
 
 
 // NMS for plate detection output.

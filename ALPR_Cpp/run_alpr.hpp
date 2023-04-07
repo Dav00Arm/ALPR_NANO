@@ -1,49 +1,17 @@
 #include "config.hpp"
-#include <QLabel>
 
-// Convert cv::Mat to QImage for UI visualization 
-QImage MatToQImage(cv::Mat const& mat)
-{
-    // Convert the color format of the image.
-    cv::Mat mat_bgr;
-    if (mat.channels() == 1)
-    {
-        cv::cvtColor(mat, mat_bgr, cv::COLOR_GRAY2BGR); 
-    }
-    else if (mat.channels() == 3)
-    {
-        cv::cvtColor(mat, mat_bgr, cv::COLOR_BGR2RGB);
-    }
-    else if (mat.channels() == 4)
-    {
-        cv::cvtColor(mat, mat_bgr, cv::COLOR_BGRA2RGBA);
-    }
-    else
-    {
-        throw std::runtime_error("Unsupported color format!");
-    }
-
-    // Create a QImage from the OpenCV Mat.
-    QImage qimage(mat_bgr.data, mat_bgr.cols, mat_bgr.rows, mat_bgr.step, QImage::Format_RGB888);
-
-    // Return the QImage.
-    return qimage.copy();
-}
+bool run_status = true;
 
 // Main ALPR function. The whole logic of recognition.  
 void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::vector<std::string> capture_source){
+    std::cout<<"STARTING ALPR\n";
+    call_ram_info();
     std::ifstream file;
     file.open(spot_config);
     cv::Size label_size(labels[0]->width(), labels[0]->height());
  
-    std::vector<std::string> label;
-    for (int i = 0; i < capture_source.size(); i++)
-    {
-        std::string title = "CCTV " + std::to_string(i);
-        label.push_back(title);
-    }
     std::cout<<"Reading cameras"<<std::endl;
-    CameraStreamer cam(capture_source);
+    CameraStreamer cam(labels, cam_names ,capture_source);
     std::cout<<"Cameras are read successfully"<<std::endl;
 
     if (!file)
@@ -77,12 +45,13 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
     bboxes = read_spots(spot_config);
     std::vector<std::vector<std::string>> status;
     
-    for(int i=0; i<capture_source.size(); i++){
+    for(int i=0; i<capture_source.size(); i++){ 
         status.push_back({});
         for(int j=0; j<bboxes[i].size(); j++){
-        status[i].push_back("None");
+            status[i].push_back("None");
         }
     }
+    
     std::cout<<"Initializing status"<<std::endl;
     std::vector<std::vector<std::string>> prev_status = status;
     std::vector<std::vector<int>> fix_times, last_idss, plate_zone_read; 
@@ -108,15 +77,17 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
     }
     std::cout<<"Starting"<<std::endl;
     auto start_time = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    while (cv::waitKey(1) != 27)
+    call_ram_info();
+    while (cv::waitKey(20) != 27)
     {
         auto start = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
         for (int cam_id = 0; cam_id < capture_source.size(); cam_id++)
         {
             cv::Mat frame;
             std::vector<cv::Mat> ill_frames;
-            if (cam.frame_queue[cam_id]->try_pop(frame))
-            {
+            if (cam.frame_queue[cam_id].try_pop(frame))
+            {                
+
                 std::vector<std::vector<cv::Point>> camera_spots = bboxes[cam_id];
                 for(int j=0;j<camera_spots.size();j++)
                 {
@@ -126,8 +97,18 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                     cv::line(frame,bboxes[cam_id][j][2],bboxes[cam_id][j][3],cv::Scalar(0,0,255),2);
                     cv::line(frame,bboxes[cam_id][j][3],bboxes[cam_id][j][0],cv::Scalar(0,0,255),2);
                 }
+                cv::Mat resized_frame;
+                cv::resize(frame, resized_frame, label_size, cv::INTER_AREA);
+                putText(resized_frame, cam_names[cam_id], org, fontFace, fontScale, color, thickness);
+
+                QImage qImage = MatToQImage(resized_frame);
+                QPixmap pixmap = QPixmap::fromImage(qImage); 
+                labels[cam_id]->setPixmap(pixmap);
+
                 std::vector<cv::Mat> car_images;
                 std::vector<std::vector<std::vector<int>>> car_boxes;
+                std::cout<<"Car detection proflie\n";
+                call_ram_info();
                 std::tie(car_images, car_boxes) = car_detection_yolo_one_id(frame,32,false,320);
 
                 std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out_plate;
@@ -136,9 +117,11 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                     std::unordered_map<int, cv::Mat> cam_images;
                     std::vector<std::vector<int>> track_boxes;
                 }
-
+                std::cout<<"BEFORE Plate detection proflie\n";
+                call_ram_info();
                 out_plate = detect_plate_onnx_id(frame, car_images, car_boxes);
-                
+                std::cout<<"AFTER Plate detection proflie\n";
+                call_ram_info();
                 if(out_plate.size()>0){
                     std::unordered_map<int, cv::Mat> spot_dict;
                     std::unordered_map<int, std::string> current_spot_dict;
@@ -181,11 +164,19 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                     }
                     for(auto one_spot_dict: spot_dict){
                         if(one_spot_dict.second.rows > 0){
+                            std::cout<<"BEFORE CRAFT proflie\n";
+                            call_ram_info();
                             std::vector<std::vector<cv::Mat>> number_images = crop_lines(one_spot_dict.second);
+                            std::cout<<"AFTER CRAFT proflie\n";
+                            call_ram_info();
                             if(number_images.size()>0){
                                 for(int nm_img=0; nm_img<number_images.size(); nm_img++){
                                     std::vector<cv::Mat> lines = number_images[nm_img];
+                                    std::cout<<"BEFORE OCR proflie\n";
+                                    call_ram_info();
                                     std::tuple<std::string,float> out = ocr_run(lines, model_ocr, converter);
+                                    std::cout<<"AFTER OCR proflie\n";
+                                    call_ram_info();
                                     std::string prediction = std::get<0>(out);
                                     float conf = std::get<1>(out); 
                                     conf *= 100;
@@ -206,21 +197,21 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                         }
                     }
                 }
-                cv::Point org(25, 50);
-                cv::Scalar color(209, 121, 27);
-                double fontScale = 1.5;
-                int thickness = 2;
-                int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+                // cv::Point org(25, 50);
+                // cv::Scalar color(209, 121, 27);
+                // double fontScale = 1.5;
+                // int thickness = 2;
+                // int fontFace = cv::FONT_HERSHEY_SIMPLEX;
 
-                putText(frame, cam_names[cam_id], org, fontFace, fontScale, color, thickness);
+                // putText(frame, cam_names[cam_id], org, fontFace, fontScale, color, thickness);
                 
-                // cv::putText(frame, cam_names[cam_id], cv::Point(50, 50), 2, (0,0,255), 5);
-                cv::Mat resized_frame;
-                cv::resize(frame, resized_frame, label_size, cv::INTER_AREA);
-                QImage qImage = MatToQImage(resized_frame);
-                QPixmap pixmap = QPixmap::fromImage(qImage); 
+                // // cv::putText(frame, cam_names[cam_id], cv::Point(50, 50), 2, (0,0,255), 5);
+                // cv::Mat resized_frame;
+                // cv::resize(frame, resized_frame, label_size, cv::INTER_AREA);
+                // QImage qImage = MatToQImage(resized_frame);
+                // QPixmap pixmap = QPixmap::fromImage(qImage); 
 
-                labels[cam_id]->setPixmap(pixmap);
+                // labels[cam_id]->setPixmap(pixmap);
             }
         }
         wait_time = 0;
@@ -250,7 +241,12 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
             std::cout<<status<<std::endl;
             prev_changed = changed;
         }
-
-        // std::cout<<"FPS: "<<1.0/(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count()-start)*1000<<std::endl;
+        cv::waitKey(1);
+        if(run_status == false){
+            return; 
+        }
+           // std::cout<<"FPS: "<<1.0/(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count()-start)*1000<<std::endl;
     }
+    
+    return;
 }

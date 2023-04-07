@@ -3,7 +3,7 @@
 #include <tuple>
 #include <chrono>
 #include <unordered_map>
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
 
 /*
     This file's content is for checking whether the license plate is

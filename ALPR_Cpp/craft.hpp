@@ -291,7 +291,8 @@ std::vector<torch::Tensor> predict_craft(cv::Mat image){
     torch::Tensor score_text = y.index({0,torch::indexing::Slice(0, torch::indexing::None, 1), torch::indexing::Slice(0, torch::indexing::None, 1), 0});
     torch::Tensor score_link = y_refiner.index({torch::indexing::Slice(0, torch::indexing::None, 1), torch::indexing::Slice(0, torch::indexing::None, 1), 0});
     std::vector<torch::Tensor> boxes = get_boxes(score_text, score_link, 0.7, 0.4, 0.4, ratio_w, ratio_h);
-    
+
+
     return boxes;
 }
 

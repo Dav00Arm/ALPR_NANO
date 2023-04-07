@@ -1,7 +1,6 @@
 #include <iostream>
-#include <torch/torch.h>
 #include "nms.hpp"
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
 
 using namespace std::chrono;
 

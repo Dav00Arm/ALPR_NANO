@@ -8,14 +8,21 @@ sudo apt-get install libcurl4-openssl-dev
 
 QTCreator
 sudo apt-get install qtcreator
+sudo apt-get install qt5-default
 
 Cmake 
+cd cmake-3.23.3
 sudo ./configure
 sudo make -j8
 sudo make install -j8
 hash -r
 
+JetsonGPIO
+git clone https://github.com/pjueon/JetsonGPIO
+cd JetsonGPIO
+mkdir build && cd build
+cmake ..
+sudo make install
+
 Additional information
 CMakeLists.txt works. 
-
-QT5

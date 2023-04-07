@@ -26,11 +26,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES +=  \
         main.cpp \
         mainui.cpp \
-        camerathread.cpp
 
 HEADERS += \
         mainui.h \
-        camerathread.h
 
 FORMS += \
         mainui.ui

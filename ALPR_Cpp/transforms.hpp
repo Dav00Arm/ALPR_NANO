@@ -1,6 +1,4 @@
 #include <iostream>
-#include <torch/torch.h>
-#include <opencv2/opencv.hpp>
 
 // Transformation for plate detection. 
 torch::Tensor Transform(cv::Mat image){

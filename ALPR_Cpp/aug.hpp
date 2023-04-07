@@ -1,9 +1,6 @@
-#include <torch/torch.h>
 #include <iostream>
 #include "onnxruntime_cxx_api.h"
 #include <string>
-#include <torch/torch.h>
-#include <opencv2/opencv.hpp>
 #include <array>
 #include <tuple>
 #include <cmath>

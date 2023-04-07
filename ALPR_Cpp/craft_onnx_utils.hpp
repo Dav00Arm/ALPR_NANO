@@ -1,7 +1,5 @@
 #include <iostream>
 #include <chrono>
-#include <torch/torch.h>
-#include <opencv2/opencv.hpp>
 #include "onnxruntime_cxx_api.h"
 
 using namespace std::chrono;
@@ -20,6 +18,8 @@ Ort::AllocatorWithDefaultOptions ort_alloc;
 //CREATE SESSIONS
 Ort::Session craft_session = Ort::Session(env,craft,Ort::SessionOptions{ nullptr });
 Ort::Session refinet_session = Ort::Session(env,refinet,Ort::SessionOptions{ nullptr });
+// Ort::Session craft_session = sessions.SessionCraft();
+// Ort::Session refinet_session = sessions.SessionRefiner();
 
 //DEFINE INPUT/OUTPUT SHAPES
 std::vector<int64_t> inputShapeCraft {1, 3, 100, 100};

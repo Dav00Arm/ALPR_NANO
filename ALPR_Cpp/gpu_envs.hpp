@@ -1,25 +1,109 @@
 #include "onnxruntime_cxx_api.h"
+#include "onnxruntime/include/onnxruntime/core/providers/cuda/cuda_provider_factory.h"
 
-// Demo code for ONNX inference with GPUs.
+class CreateSession{
+    public:
+    const char* car_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/yolov5n_cpu.onnx";
+    const char* plate_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/plate_detection_cpu.onnx";
+    const char* craft_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/craft_cpu.onnx";
+    const char* refiner_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/refiner_cpu.onnx";
 
-Ort::Session CreateSessionCar(){
-
-    static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "test");
-    // const char* model_path = "models/yolov5n_cpu.onnx";
-    const char* model_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/yolov5n_cpu.onnx";
-
+    Ort::Env env;    
     Ort::SessionOptions session_options;    
-    // session_options.SetIntraOpNumThreads(1);
-    session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
-    OrtCUDAProviderOptions cuda_options;
-    cuda_options.device_id = 0;
-    // But is zero a valid value for every variable? Not quite. It is not guaranteed. In the other words: does every enum
-    // type contain zero? The following line can be omitted because EXHAUSTIVE is mapped to zero in onnxruntime_c_api.h.
-    cuda_options.gpu_mem_limit = static_cast<int>(SIZE_MAX * 1024 * 1024);
-    cuda_options.arena_extend_strategy = 1;
-    cuda_options.cudnn_conv_algo_search = OrtCudnnConvAlgoSearch::EXHAUSTIVE;
-    cuda_options.do_copy_in_default_stream = 1;
-    cuda_options.default_memory_arena_cfg = nullptr;
-    // session_options.AppendExecutionProvider_CUDA(cuda_options);
-    return Ort::Session(env, model_path, session_options);
-}
+
+    CreateSession(){
+        env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");
+        // session_options.SetIntraOpNumThreads(1);
+        // session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
+        session_options.SetIntraOpNumThreads(1);
+        session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
+        // options.cudnn_conv_algo_search = OrtCudnnConvAlgoSearch::EXHAUSTIVE;
+        // options.gpu_mem_limit = 2048;
+        // options.arena_extend_strategy = 0;
+        session_options.AppendExecutionProvider_CUDA(0, ONNXRuntimeProviderOptions_CUDA{
+                                                    2*1024 * 1024 * 1024, // 2 GB
+                                                    kCudaPreferShared,
+                                                    kCudaGrow,
+                                                    1024
+                                                    });
+
+    
+    }
+    ~CreateSession(){}
+    Ort::Session SessionCar(){
+        return Ort::Session(env, car_path, session_options);
+    }
+
+    Ort::Session SessionPlate(){
+        return Ort::Session(env, plate_path, session_options);
+    }
+
+    Ort::Session SessionCraft(){
+        return Ort::Session(env, craft_path, session_options);
+    }
+
+    Ort::Session SessionRefiner(){
+        return Ort::Session(env, refiner_path, session_options);
+    }
+};
+
+CreateSession sessions;
+
+// // Demo code for ONNX inference with GPUs.
+// // Car Detection 
+// std::vector<Ort::Session> CreateSession(){
+
+//     const char* car_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/yolov5n_cpu.onnx";
+//     const char* plate_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/plate_detection_cpu.onnx";
+//     const char* craft_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/craft_cpu.onnx";
+//     const char* refiner_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/refiner_cpu.onnx";
+
+//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
+
+//     Ort::SessionOptions session_options;    
+//     session_options.SetIntraOpNumThreads(1);
+//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
+//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
+//     std::vector<Ort::Session> outSessions = {Ort::Session(env, car_path, session_options),
+//                                              Ort::Session(env, plate_path, session_options),
+//                                              Ort::Session(env, craft_path, session_options),
+//                                              Ort::Session(env, refiner_path, session_options)};
+//     return outSessions;
+// } 
+
+
+// Ort::Session CreateSessionPlate(){
+
+//     const char* model_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/plate_detection_cpu.onnx";
+//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
+
+//     Ort::SessionOptions session_options;    
+//     session_options.SetIntraOpNumThreads(1);
+//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
+//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
+//     return Ort::Session(env, model_path, session_options);
+// } 
+
+// Ort::Session CreateSessionCraft(){
+
+//     const char* model_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/craft_cpu.onnx";
+//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
+
+//     Ort::SessionOptions session_options;    
+//     session_options.SetIntraOpNumThreads(1);
+//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
+//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
+//     return Ort::Session(env, model_path, session_options);
+// } 
+
+// Ort::Session CreateSessionRefiner(){
+
+//     const char* model_path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/refiner_cpu.onnx";
+//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
+
+//     Ort::SessionOptions session_options;    
+//     session_options.SetIntraOpNumThreads(1);
+//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
+//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
+//     return Ort::Session(env, model_path, session_options);
+// } 

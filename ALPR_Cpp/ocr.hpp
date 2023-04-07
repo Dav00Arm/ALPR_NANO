@@ -1,6 +1,4 @@
-#include <torch/torch.h>
 #include <torch/script.h>
-#include <opencv2/opencv.hpp>
 #include "futrextr.hpp"
 
 

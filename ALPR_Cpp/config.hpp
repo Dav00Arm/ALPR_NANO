@@ -1,6 +1,9 @@
+#pragma once
 #include <iostream>
 #include <cstdio>
 #include <opencv2/opencv.hpp>
+#include <torch/torch.h>
+#include <QLabel>
 #include "cameraStreamer.hpp"
 #include "draw_spots.hpp"
 #include "onnxruntime_cxx_api.h"
@@ -11,14 +14,22 @@
 #include "ocr.hpp"
 #include "client.hpp"
 
-// All configurations for the program. 
 
+// Pixmap options
+cv::Point org(25, 50);
+cv::Scalar color(209, 121, 27);
+double fontScale = 1.5;
+int thickness = 2;
+int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+
+
+// All configurations for the program. 
 double max_cosine_distance = 0.5; 
 // int nn_budget = -1;
 double nms_max_overlap = 1.0;
 std::string path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/traced_ocr_model_fixed.pt";
 std::string spot_config = "spot_config.txt";
-//  // New width and height
+// New width and height
 
 int max_spots = 2, wait_time = 0;    
 cv::Mat cam_img;
@@ -38,3 +49,4 @@ torch::jit::Module model_ocr = torch::jit::load(path);
 // //    "rtsp://admin:22dvcgwqw7@37.252.72.204:559/cam/realmonitor?channel=1&subtype=0"
 // };
 std::vector<std::string> mac_addresses = {"9c:14:63:64:ec:c0","9c:14:63:64:e5:f0","9c:14:63:64:e8:ac","9c:14:63:64:eb:0a","9c:14:63:64:e8:af"};
+

@@ -26,8 +26,9 @@ class Predictor_ONNX{
         filter_threshold = filter_threshold_;
         candidate_size = candidate_size_;
     }
-
+    ~Predictor_ONNX(){}
     Ort::Session session = Ort::Session(env,net,Ort::SessionOptions{ nullptr });
+    // Ort::Session session = sessions.SessionPlate();
     char* inputName = session.GetInputName(0,ort_alloc);
     char* outputName1 = session.GetOutputName(0,ort_alloc);
     char* outputName2 = session.GetOutputName(1,ort_alloc);
@@ -77,6 +78,7 @@ class Predictor_ONNX{
         probs = probs.index({mask});
         if(probs.size(0) == 0){
             torch::Tensor a = torch::zeros(4);
+
             return a;
         }
 

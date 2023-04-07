@@ -20,6 +20,8 @@ std::string spot_config = "spot_config.txt";
 
 int main()
 {   
+    call_ram_info();
+
     std::cout<<"Starting"<<std::endl;
     int max_spots = 2, wait_time = 0;    
     cv::Mat cam_img;
@@ -114,6 +116,8 @@ int main()
     }
     std::cout<<"Starting"<<std::endl;
     auto start_time = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::cout<<"STARTING ALPR\n";
+    call_ram_info();
     while (cv::waitKey(1) != 27)
     {
         auto start = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -121,7 +125,7 @@ int main()
         {
             cv::Mat frame;
             std::vector<cv::Mat> ill_frames;
-            if (cam.frame_queue[cam_id]->try_pop(frame))
+            if (cam.frame_queue[cam_id].try_pop(frame))
             {
                 std::vector<std::vector<cv::Point>> camera_spots = bboxes[cam_id];
                 for(int j=0;j<camera_spots.size();j++)
@@ -134,16 +138,22 @@ int main()
                 }
                 std::vector<cv::Mat> car_images;
                 std::vector<std::vector<std::vector<int>>> car_boxes;
+                std::cout<<"BEFORE Car detection proflie\n";
+                call_ram_info();
                 std::tie(car_images, car_boxes) = car_detection_yolo_one_id(frame,32,false,320);
-
+                std::cout<<"AFTER Car detection proflie\n";
+                call_ram_info();
                 std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out_plate;
                 std::vector<std::vector<std::vector<int>>> bbox;
                 if(car_images.size() > 0){
                     std::unordered_map<int, cv::Mat> cam_images;
                     std::vector<std::vector<int>> track_boxes;
                 }
+                std::cout<<"Before Plate detection proflie\n";
+                call_ram_info();
                 out_plate = detect_plate_onnx_id(frame, car_images, car_boxes);
-                
+                std::cout<<"AFTER Plate detection proflie\n";
+                call_ram_info();
                 if(out_plate.size()>0){
                     std::unordered_map<int, cv::Mat> spot_dict;
                     std::unordered_map<int, std::string> current_spot_dict;
@@ -186,11 +196,19 @@ int main()
                     }
                     for(auto one_spot_dict: spot_dict){
                         if(one_spot_dict.second.rows > 0){
+                            std::cout<<"BEFORE CRAFT proflie\n";
+                            call_ram_info();
                             std::vector<std::vector<cv::Mat>> number_images = crop_lines(one_spot_dict.second);
+                            std::cout<<"AFTER CRAFT proflie\n";
+                            call_ram_info();
                             if(number_images.size()>0){
                                 for(int nm_img=0; nm_img<number_images.size(); nm_img++){
                                     std::vector<cv::Mat> lines = number_images[nm_img];
+                                    std::cout<<"BEFORE OCR proflie\n";
+                                    call_ram_info();
                                     std::tuple<std::string,float> out = ocr_run(lines, model, converter);
+                                    std::cout<<"AFTER OCR proflie\n";
+                                    call_ram_info();
                                     std::string prediction = std::get<0>(out);
                                     float conf = std::get<1>(out); 
                                     conf *= 100;

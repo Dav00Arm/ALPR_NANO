@@ -2,7 +2,7 @@
 #include "mainui.h"
 #include "ui_mainui.h"
 #include <QScreen>
-
+#include <QDebug>
 // All callback functions of UI.
 
 Json::Value whiteList(Json::objectValue);
@@ -146,14 +146,29 @@ void MainUI::on_SignIn_button_clicked()
 
 // Settings button clicked logic. (not finished)
 void MainUI::on_cameraSettings_clicked()
-{
+{   
+    run_status = false;
     ui->AddLineWarning->hide();
     ui->CheckBoxWarning->hide();
-    // ui->cam1->setText("No connection");
-    // ui->cam2->setText("No connection");
-    // ui->cam3->setText("No connection");
-    // ui->cam4->setText("No connection");
     ui->stackedWidget->setCurrentIndex(2);
+    std::ifstream jsonURLs("URLs.json");
+    Json::Value CamUrlsTmp(Json::objectValue);
+    jsonURLs >> CamUrlsTmp;
+
+    if(CamUrlsTmp.isMember("0")){
+        ui->camera1LineEdit->setText(QString::fromStdString(CamUrlsTmp["0"].asString()));
+    }
+    if(CamUrlsTmp.isMember("1")){
+        ui->camera2LineEdit->setText(QString::fromStdString(CamUrlsTmp["1"].asString()));
+    }
+    if(CamUrlsTmp.isMember("2")){
+        ui->camera3LineEdit->setText(QString::fromStdString(CamUrlsTmp["2"].asString()));
+    }
+    if(CamUrlsTmp.isMember("3")){
+        ui->camera4LineEdit->setText(QString::fromStdString(CamUrlsTmp["3"].asString()));
+    }
+
+    jsonURLs.close();
 }
 
 // Add line in WhiteList table. Add new "name": "License plate" pair.
@@ -252,6 +267,27 @@ void MainUI::on_SaveButton_clicked()
 // Home button clicked from camera settings page logic.
 void MainUI::on_HomeButton_clicked()
 {
+    int delUrl = std::remove("URLs.json");
+    Json::Value CamUrls(Json::objectValue);
+
+    std::ofstream jsonURLs("URLs.json");
+    if(!ui->camera1LineEdit->text().isEmpty()){
+        CamUrls["0"] = ui->camera1LineEdit->text().toStdString();
+    }
+    if(!ui->camera2LineEdit->text().isEmpty()){
+        CamUrls["1"] = ui->camera2LineEdit->text().toStdString();
+    }
+    if(!ui->camera3LineEdit->text().isEmpty()){
+        CamUrls["2"] = ui->camera3LineEdit->text().toStdString();
+    }
+    if(!ui->camera4LineEdit->text().isEmpty()){
+        CamUrls["3"] = ui->camera4LineEdit->text().toStdString();
+    }
+    if (jsonURLs.is_open()) {
+        jsonURLs << CamUrls;
+        jsonURLs.close();
+    } 
+
     bool isChecked1 = ui->camera1CheckBox->isChecked();
     bool isChecked2 = ui->camera2CheckBox->isChecked();
     bool isChecked3 = ui->camera3CheckBox->isChecked();
@@ -268,7 +304,10 @@ void MainUI::on_HomeButton_clicked()
     ui->CheckBoxWarning->hide();
     names = {};
     urls = {};
-
+    ui->cam1->setText("No connection");
+    ui->cam2->setText("No connection");
+    ui->cam3->setText("No connection");
+    ui->cam4->setText("No connection");
     if(isChecked1){
         if(name1 == "" || url1 == ""){
             ui->CheckBoxWarning->show();
@@ -276,6 +315,7 @@ void MainUI::on_HomeButton_clicked()
             return;
         }
         else{
+            ui->cam1->setText("Loading...");
             names.push_back(name1.toStdString());
             urls.push_back(url1.toStdString());
         }
@@ -287,6 +327,7 @@ void MainUI::on_HomeButton_clicked()
             return;
         }
         else{
+            ui->cam2->setText("Loading...");
             names.push_back(name2.toStdString());
             urls.push_back(url2.toStdString());
         }
@@ -298,6 +339,7 @@ void MainUI::on_HomeButton_clicked()
             return;
         }
         else{
+            ui->cam3->setText("Loading...");
             names.push_back(name3.toStdString());
             urls.push_back(url3.toStdString());
         }
@@ -309,6 +351,7 @@ void MainUI::on_HomeButton_clicked()
             return;
         }
         else{
+            ui->cam4->setText("Loading...");
             names.push_back(name4.toStdString());
             urls.push_back(url4.toStdString());
         }
@@ -317,20 +360,29 @@ void MainUI::on_HomeButton_clicked()
         SaveWhiteList();
     }
     if(names.size()>0){
-        ui->stackedWidget->setCurrentIndex(1);
-        ui->cam1->setText("No connection");
-        ui->cam2->setText("No connection");
-        ui->cam3->setText("No connection");
-        ui->cam4->setText("No connection");
-        QLabel *label1 = ui->cam1;
-        QLabel *label2 = ui->cam2;
-        QLabel *label3 = ui->cam3;
-        QLabel *label4 = ui->cam4;
-        std::vector<QLabel*> labels = {label1, label2, label3, label4};
+        std::string cameraState = cameraChecker(names, urls);
+        if(cameraChecker(names, urls) == "True"){
+            ui->stackedWidget->setCurrentIndex(1);
 
-        alpr(labels, names, urls);
+            QLabel *label1 = ui->cam1;
+            QLabel *label2 = ui->cam2;
+            QLabel *label3 = ui->cam3;
+            QLabel *label4 = ui->cam4;
+            std::vector<QLabel*> labels = {label1, label2, label3, label4};
+            run_status = true;  
+            alpr(labels, names, urls);
+        }
+        else{
+            ui->CheckBoxWarning->show();
+            ui->CheckBoxWarning->setText(QString::fromStdString("Camera " + cameraState + " is unavailable"));
+        }
+
+
     }
-    ui->stackedWidget->setCurrentIndex(1);
+    else if(names.size()==0){
+        ui->stackedWidget->setCurrentIndex(1);
+    }
+
     
 }
 
@@ -345,7 +397,27 @@ void MainUI::on_resetLogin_clicked()
     this->setPalette(palette);
     int result = std::remove("userInfo.json");
 
-    ui->Welcome->setText("                  Reset");
+    ui->Welcome->setText("     Reset");
     ui->Username_label->setText("New Username");
     ui->Password_label->setText("New Password");
+    ui->Username_input->setText("");
+    ui->Password_input->setText("");
+    ui->Password2_input->setText("");
 }
+
+// Close window after "x" button 
+void MainUI::closeEvent(QCloseEvent *event)  {
+        // Ask the user if they really want to quit
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Quit", "Are you sure you want to quit?",
+                                        QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            // If the user clicked "Yes", close the window and exit the application
+            event->accept();
+            run_status = false;
+            QApplication::exit();
+        } else {
+            // If the user clicked "No", ignore the close event and keep the window open
+            event->ignore();
+        }
+    }

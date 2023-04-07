@@ -1,4 +1,3 @@
-#include <torch/torch.h>
 #include <map>
 #include <string>
 

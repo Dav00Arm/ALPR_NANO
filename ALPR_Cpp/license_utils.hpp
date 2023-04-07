@@ -2,7 +2,7 @@
 #include <vector>
 #include <tuple>
 #include <chrono>
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
 #include "predictor.hpp"
 using namespace std::chrono;
 

@@ -1,11 +1,13 @@
 #ifndef MAINUI_H
 #define MAINUI_H
-
+ 
 #include <QMainWindow>
 #include <vector>
 #include <QLabel>
 #include <unordered_map>
-// #include "camerathread.h"
+#include <QMessageBox>
+#include <QCloseEvent>
+#include <QApplication>
 
 // Main UI class declaration.
 
@@ -22,7 +24,6 @@ public:
     int currentList = -1;
     std::vector<std::string> names;
     std::vector<std::string> urls;
-
 
     ~MainUI();
 
@@ -48,6 +49,8 @@ private slots:
     void on_SignIn_button_clicked();
 
     void on_resetLogin_clicked();
+
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::MainUI *ui;

@@ -1,9 +1,8 @@
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
 #include <iostream> 
 #include <tuple>
 #include <typeinfo>
 #include <array>
-#include <torch/torch.h>
 #include <ATen/ATen.h>
 
 // Class for drawing spots before the program starts.

@@ -1,4 +1,3 @@
-#include <torch/torch.h>
 
 // OCR model parts. Some of this functions are not used.
 torch::nn::Conv2dOptions

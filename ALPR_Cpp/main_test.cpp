@@ -1,7 +1,6 @@
 #include "/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/mainui.h"
-#include <QApplication>
 #include <QtWidgets>
-
+#include <iostream>
 // MAIN function
 int main(int argc, char *argv[])
 {   
@@ -11,12 +10,20 @@ int main(int argc, char *argv[])
     
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
-    int height = screenGeometry.height();
-    int width = screenGeometry.width();
+    int height = screenGeometry.height()-30; //Height: 1050 NanoJetpack 4.6
+    int width = screenGeometry.width()-60; //Width: 1860 NanoJetpack 4.6
     w.setWindowTitle("Locator ALPR");
 
     w.setFixedSize(width, height);
 
+    QFont font = a.font();
+    font.setPointSize(10);
+    a.setFont(font);
+
+    QLabel *WelcomeLabel = w.findChild<QLabel*>("Welcome");
+    WelcomeLabel->setText("   Welcome");
+    QLabel *WelcomeLabel2 = w.findChild<QLabel*>("Welcome_2");
+    WelcomeLabel2->setText("   Welcome");
     //Center the Sign up box
     QWidget *CentralWidget = w.findChild<QWidget*>("CenterWidget"); //getting the widget by its name
     QWidget *CentralWidget2 = w.findChild<QWidget*>("CenterWidget_2"); //getting the widget by its name
@@ -43,9 +50,9 @@ int main(int argc, char *argv[])
 
     QPushButton *settings = w.findChild<QPushButton*>("cameraSettings");
     settings->setIcon(QIcon("/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/images/settings.png")); // set the icon
-    settings->setIconSize(QSize(30, 30)); // set the icon size      
-    settings->setFixedSize(30, 30); // set the same width and height
-    settings->move(width-60, 0);
+    settings->setIconSize(QSize(width/47, height/30)); // set the icon size      
+    settings->setFixedSize(width/47, height/30); // set the same width and height
+    settings->move(width-65, 0);
 
     QLabel *camera1Label = w.findChild<QLabel*>("camera1Label");
     QLabel *camera2Label = w.findChild<QLabel*>("camera2Label");
@@ -80,49 +87,69 @@ int main(int argc, char *argv[])
     QCheckBox *camera3CheckBox = w.findChild<QCheckBox*>("camera3CheckBox");
     QCheckBox *camera4CheckBox = w.findChild<QCheckBox*>("camera4CheckBox");
 
-    camera1Label->setFixedSize(50, 25);
+    //Group 1
+    camera1Label->setFixedSize(width/29, height/35);
     camera1Label->move(5, 0);
-    cameraName1LineEdit->setFixedSize(200, 20);
+
+    cameraName1LineEdit->setFixedSize(width/8, height/35);
     cameraName1LineEdit->move(5, 27);
-    whiteList1->setFixedSize(80, 20);
-    whiteList1->move(210, 27);
-    camera1LineEdit->setFixedSize(200, 20);
-    camera1LineEdit->move(5, 54);
-    camera1CheckBox->setFixedSize(60, 20);
-    camera1CheckBox->move(210, 54);
 
-    camera2Label->setFixedSize(50, 25);
-    camera2Label->move(5, 72);
-    cameraName2LineEdit->setFixedSize(200, 20);
-    cameraName2LineEdit->move(5, 99);
-    whiteList2->setFixedSize(80, 20);
-    whiteList2->move(210, 99);
-    camera2LineEdit->setFixedSize(200, 20);
-    camera2LineEdit->move(5, 126);
-    camera2CheckBox->setFixedSize(60, 20);
-    camera2CheckBox->move(210, 126);
+    whiteList1->setFixedSize(width/16, height/35);
+    whiteList1->move(width/8+15, 27);
 
-    camera3Label->setFixedSize(50, 25);
-    camera3Label->move(5, 149);
-    cameraName3LineEdit->setFixedSize(200, 20);
-    cameraName3LineEdit->move(5, 176);
-    whiteList3->setFixedSize(80, 20);
-    whiteList3->move(210, 176);
-    camera3LineEdit->setFixedSize(200, 20);
-    camera3LineEdit->move(5, 203);
-    camera3CheckBox->setFixedSize(60, 20);
-    camera3CheckBox->move(210, 203);
+    camera1LineEdit->setFixedSize(width/8, height/35);
+    camera1LineEdit->move(5, 59);
 
-    camera4Label->setFixedSize(50, 25);
-    camera4Label->move(5, 220);
-    cameraName4LineEdit->setFixedSize(200, 20);
-    cameraName4LineEdit->move(5, 247);
-    whiteList4->setFixedSize(80, 20);
-    whiteList4->move(210, 247);
-    camera4LineEdit->setFixedSize(200, 20);
-    camera4LineEdit->move(5, 274);
-    camera4CheckBox->setFixedSize(60, 20);
-    camera4CheckBox->move(210, 274);
+    camera1CheckBox->setFixedSize(width/16, height/35);
+    camera1CheckBox->move(width/8+15, 59);
+
+    //Group 2
+    camera2Label->setFixedSize(width/29, height/35);
+    camera2Label->move(5, 84);
+
+    cameraName2LineEdit->setFixedSize(width/8, height/35);
+    cameraName2LineEdit->move(5, 111);
+
+    whiteList2->setFixedSize(width/16, height/35);
+    whiteList2->move(width/8+15, 111);
+
+    camera2LineEdit->setFixedSize(width/8, height/35);
+    camera2LineEdit->move(5, 143);
+
+    camera2CheckBox->setFixedSize(width/16, height/35);
+    camera2CheckBox->move(width/8+15, 143);
+
+    //Group 3
+    camera3Label->setFixedSize(width/29, height/35);
+    camera3Label->move(5, 168);
+
+    cameraName3LineEdit->setFixedSize(width/8, height/35);
+    cameraName3LineEdit->move(5, 195);
+
+    whiteList3->setFixedSize(width/16, height/35);
+    whiteList3->move(width/8+15, 195);
+
+    camera3LineEdit->setFixedSize(width/8, height/35);
+    camera3LineEdit->move(5, 227);
+
+    camera3CheckBox->setFixedSize(width/16, height/35);
+    camera3CheckBox->move(width/8+15, 227);
+
+    //Group 4
+    camera4Label->setFixedSize(width/29, height/35);
+    camera4Label->move(5, 252);
+
+    cameraName4LineEdit->setFixedSize(width/8, height/35);
+    cameraName4LineEdit->move(5, 279);
+
+    whiteList4->setFixedSize(width/16, height/35);
+    whiteList4->move(width/8+15, 279);
+
+    camera4LineEdit->setFixedSize(width/8, height/35);
+    camera4LineEdit->move(5, 311);
+
+    camera4CheckBox->setFixedSize(width/16, height/35);
+    camera4CheckBox->move(width/8+15, 311);
 
 
     QTableWidget *table = w.findChild<QTableWidget*>("WhiteListTable");
@@ -131,32 +158,45 @@ int main(int argc, char *argv[])
     QLabel *CheckBoxWarning = w.findChild<QLabel*>("CheckBoxWarning"); 
     QLabel *WhiteListLabel = w.findChild<QLabel*>("WhiteListLabel"); 
 
-    addLine->move(width/2-130,450);
+    addLine->move(width/2-130,40+height/2.5+10);
+    addLine->setFixedSize(width/20, height/40);
     
     AddLineWarning->move(width/2-30, 450);
-    CheckBoxWarning->move(5, 360);
-    WhiteListLabel->move(width/2-130,10);
+    AddLineWarning->setFixedSize(width/10, height/40);
+
+    CheckBoxWarning->move(5, 350+height/24+10);
+    CheckBoxWarning->setFixedSize(400, 20);
+
+    WhiteListLabel->move(width/2-130, 15);
+    WhiteListLabel->setFixedSize(width/10, height/40);
 
     table->move(width/2-130,40);
     table->setRowCount(0);
     table->setColumnCount(2);
-    table->setColumnWidth(0, 140);
-    table->setColumnWidth(1, 120);
+    table->setColumnWidth(0, width/12);
+    table->setColumnWidth(1, width/12);
 
-    table->resize(300, 400);
+    table->resize(width/6+30, height/2.5);
     table->setHorizontalHeaderLabels(QStringList() << "Name" << "License Number");
 
+    QFont fontButtons("Arial", 11, QFont::Black);
+    
     QPushButton *saveButton = w.findChild<QPushButton*>("SaveButton");
-    saveButton->setFixedSize(60,30);
-    saveButton->move(5, 300);
+    saveButton->setFixedSize(width/22,height/24);
+    saveButton->move(5, 350);
 
     QPushButton *homeButton = w.findChild<QPushButton*>("HomeButton");
-    homeButton->setFixedSize(70,30);
-    homeButton->move(70, 300);
+    homeButton->setFixedSize(width/22,height/24);
+    homeButton->move(width/22+10, 350);
     
     QPushButton *resetLogin = w.findChild<QPushButton*>("resetLogin");
-    resetLogin->setFixedSize(60,30);
-    resetLogin->move(145, 300);
+    resetLogin->setFixedSize(width/22,height/24);
+    resetLogin->move(width/22+10+width/22+5, 350);
+    
+    saveButton->setFont(fontButtons);
+    homeButton->setFont(fontButtons);
+    resetLogin->setFont(fontButtons);
+
     w.show();
 
     return a.exec();

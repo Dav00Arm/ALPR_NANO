@@ -1,0 +1,6 @@
+{
+	"0" : "rtsp://admin:22dvcgwqw7@37.252.72.204:555/cam/realmonitor?channel=1&subtype=0",
+	"1" : "rtsp://admin:22dvcgwqw7@37.252.72.204:556/cam/realmonitor?channel=1&subtype=0",
+	"2" : "rtsp://admin:22dvcgwqw7@37.252.72.204:557/cam/realmonitor?channel=1&subtype=0",
+	"3" : "rtsp://admin:22dvcgwqw7@37.252.72.204:558/cam/realmonitor?channel=1&subtype=0"
+}
