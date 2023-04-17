@@ -27,8 +27,8 @@ class Predictor_ONNX{
         candidate_size = candidate_size_;
     }
     ~Predictor_ONNX(){}
-    Ort::Session session = Ort::Session(env,net,Ort::SessionOptions{ nullptr });
-    // Ort::Session session = sessions.SessionPlate();
+    // Ort::Session session = Ort::Session(env,net,Ort::SessionOptions{ nullptr });
+    Ort::Session session = sessions.SessionPlate();
     char* inputName = session.GetInputName(0,ort_alloc);
     char* outputName1 = session.GetOutputName(0,ort_alloc);
     char* outputName2 = session.GetOutputName(1,ort_alloc);

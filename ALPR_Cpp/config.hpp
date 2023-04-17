@@ -1,12 +1,13 @@
 #pragma once
 #include <iostream>
 #include <cstdio>
+#include <codecvt>
+#include <locale>
 #include <opencv2/opencv.hpp>
 #include <torch/torch.h>
 #include <QLabel>
 #include "cameraStreamer.hpp"
 #include "draw_spots.hpp"
-#include "onnxruntime_cxx_api.h"
 #include "dtc.hpp"
 #include "license_utils.hpp"
 #include "utils.hpp"
@@ -27,7 +28,7 @@ int fontFace = cv::FONT_HERSHEY_SIMPLEX;
 double max_cosine_distance = 0.5; 
 // int nn_budget = -1;
 double nms_max_overlap = 1.0;
-std::string path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/traced_ocr_model_fixed.pt";
+std::string path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/ocr(PN).pt";
 std::string spot_config = "spot_config.txt";
 // New width and height
 
@@ -37,7 +38,8 @@ cv::Mat cam_img;
 std::vector<std::vector<std::vector<cv::Point>>> bboxes;
 std::vector<std::vector<cv::Point>> bbbox2;
 std::vector<cv::Point> bbbox1;
-std::string p = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+// std::string p = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!ՊՆ$Շ&'()*+,-./:;<=>?@[\\]^_`{|}~"; //ՊՆՇՍՏ
+std::string p = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!pn$s&'()*+,-./:;<=>?@[\\]^_`{|}~"; //ՊՆՇՍՏ
 AttnLabelConverter converter(p);
 // torch::jit::Module model_ocr;
 torch::jit::Module model_ocr = torch::jit::load(path);

@@ -19,8 +19,10 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
         std::ofstream file;
         file.open(spot_config);
         for(int i=0;i<cam.initialFrames.size();i++)
+        // for(int i=0;i<1;i++)
         {   
-            cam_img = cam.initialFrames[i];
+            // cam_img = cam.initialFrames[i];
+            cv::Mat cam_img = cv::imread("PN_car.jpg");
             for(int j=0;j<max_spots;j++)
             {
                 SpotDrawing ui(cam_img,"CCTV "+std::to_string(i)); 
@@ -86,8 +88,9 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
             cv::Mat frame;
             std::vector<cv::Mat> ill_frames;
             if (cam.frame_queue[cam_id].try_pop(frame))
+            if(true)
             {                
-
+                // frame = cv::imread("PN_car2.jpg");
                 std::vector<std::vector<cv::Point>> camera_spots = bboxes[cam_id];
                 for(int j=0;j<camera_spots.size();j++)
                 {
@@ -177,9 +180,11 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                                     std::tuple<std::string,float> out = ocr_run(lines, model_ocr, converter);
                                     std::cout<<"AFTER OCR proflie\n";
                                     call_ram_info();
-                                    std::string prediction = std::get<0>(out);
+                                    std::string prediction = RusPlateProcess(std::get<0>(out));
                                     float conf = std::get<1>(out); 
                                     conf *= 100;
+                                    std::cout<<prediction<<" "<<conf<<std::endl;
+
                                     if(prediction.size()<4){
                                         plate_zone[cam_id][one_spot_dict.first] = {};
                                     }

@@ -1,10 +1,12 @@
 #include "/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/mainui.h"
 #include <QtWidgets>
 #include <iostream>
+#include <cuda_runtime.h>
+
 // MAIN function
 int main(int argc, char *argv[])
 {   
-    // UI
+
     QApplication a(argc, argv);
     MainUI w;
     
