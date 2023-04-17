@@ -13,7 +13,7 @@ can give URLs to your streams, and give names for your cameras. Click "manage wh
 Change paths to your libs in CMakeLists.txt file then run "make".
 
 ## How It's made?
-#### Stages
+### Stages
 Stream->car detection->plate detection->craft+refiner->ocr.
 
 ### Stream.
