@@ -1,5 +1,6 @@
 build
 ALPR_Cpp/torch
+ALPR_Cpp/models
 ALPR_Cpp/tbb
 ALPR_Cpp/models
 ALPR_Cpp/onnxruntime
