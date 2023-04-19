@@ -278,3 +278,121 @@ QImage MatToQImage(cv::Mat const& mat)
     // Return the QImage.
     return qimage.copy();
 }
+
+// Checks if license plate is in Russian format
+bool checkRusFormat(std::string plate){
+    std::vector<int> plateFormat = {};
+    // Formats
+    std::vector<std::vector<int>> RusFormats = {{1, 0, 0, 0, 1, 1, 0, 0}, // 0-Digit, 1-letter
+                                                {1, 0, 0, 0, 1, 1, 0, 0, 0},
+                                                {1, 0, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 1, 1, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 1, 0, 0},
+                                                {1, 1, 0, 0, 0, 0, 0},
+                                                {1, 1, 0, 0, 0, 0, 0, 0},
+                                                {1, 1, 0, 0, 0, 1, 0, 0},
+                                                {1, 1, 0, 0, 0, 1, 0, 0, 0},
+                                                {1, 1, 1, 0, 0, 0, 0, 0},
+                                                {0, 0, 0, 0, 1, 1, 0, 0},
+                                                {{0, 0, 0, 0, 1, 1, 0, 0, 0}}};
+    for(int i=0; i<plate.size(); i++){
+    if(isalpha(plate[i])){
+        plateFormat.push_back(1);
+    }
+    else if(isdigit(plate[i])){
+        plateFormat.push_back(0);
+        
+    }
+    }
+    for(std::vector<int> formats: RusFormats){
+        if(plateFormat == formats){
+            return true;
+        }
+    }
+    return false;
+}
+
+// Convert latin letters to Russian if checkRusFormat is true
+std::string LatinToRus(std::string LatinPlate){
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+    std::string rusString = "";
+    wchar_t WideChar;
+    for(int j=0; j<LatinPlate.size(); j++){
+        if(isalpha(LatinPlate[j])){
+            if(LatinPlate[j] == 'A'){
+                WideChar = L'А';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'B'){
+                WideChar = L'В';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'E'){
+                WideChar = L'Е';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'K'){
+                WideChar = L'К';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'M'){
+                WideChar = L'М';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'H'){
+                WideChar = L'Н';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'P'){
+                WideChar = L'Р';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'C'){
+                WideChar = L'С';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'O'){
+                WideChar = L'О';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+            if(LatinPlate[j] == 'T'){
+                WideChar = L'Т';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }if(LatinPlate[j] == 'Y'){
+                WideChar = L'У';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }if(LatinPlate[j] == 'X'){
+                WideChar = L'Х';
+                std::string toString = converter.to_bytes(WideChar);
+                rusString += toString;
+            }
+        }
+        else{
+            rusString += LatinPlate[j];
+        }
+    }
+    return rusString;
+}
+
+// Russian plate processing
+std::string RusPlateProcess(std::string Plate){
+    bool isRus = checkRusFormat(Plate);
+    std::cout<<"Is Russian: "<<isRus<<std::endl;
+    if(isRus){
+        std::string rusPlate = LatinToRus(Plate);
+        return rusPlate;
+    }
+    return Plate;
+
+}

@@ -10,6 +10,7 @@ class DetectMultiBackend{
     Ort::RunOptions runOptions;
     Ort::AllocatorWithDefaultOptions ort_alloc;
     Ort::MemoryInfo memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+
     Ort::Session session = sessions.SessionCar();
     std::vector<std::vector<float>> forward(std::vector<float> img)
     {   

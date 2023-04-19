@@ -1,12 +1,11 @@
 #include "ALPRUI/mainui.h"
 #include <QtWidgets>
 #include <iostream>
+#include <cuda_runtime.h>
 
 // MAIN function
 int main(int argc, char *argv[])
 {   
-    // UI
-    std::cout<<"HERE\n";
     QApplication a(argc, argv);
     MainUI w;
     

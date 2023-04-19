@@ -17,79 +17,30 @@ class CreateSession{
     }
     ~CreateSession(){}
     Ort::Session SessionCar(){
-        return Ort::Session(env, car_path, session_options);
+        std::cout<<"Creating Car session\n";        
+        Ort::Session session = Ort::Session(env, car_path, session_options);
+        std::cout<<"Created Car session\n";        
+
+        return session;
     }
 
     Ort::Session SessionPlate(){
+        std::cout<<"Created Plate session\n";        
+
         return Ort::Session(env, plate_path, session_options);
     }
 
     Ort::Session SessionCraft(){
+        std::cout<<"Created Craft session\n";        
+
         return Ort::Session(env, craft_path, session_options);
     }
 
     Ort::Session SessionRefiner(){
+        std::cout<<"Created Refiner session\n";        
+
         return Ort::Session(env, refiner_path, session_options);
     }
 };
 
 CreateSession sessions;
-
-// // Demo code for ONNX inference with GPUs.
-// // Car Detection 
-// std::vector<Ort::Session> CreateSession(){
-
-//     const char* car_path = "ALPR_Cpp/models/yolov5n_cpu.onnx";
-//     const char* plate_path = "ALPR_Cpp/models/plate_detection_cpu.onnx";
-//     const char* craft_path = "ALPR_Cpp/models/craft_cpu.onnx";
-//     const char* refiner_path = "ALPR_Cpp/models/refiner_cpu.onnx";
-
-//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
-
-//     Ort::SessionOptions session_options;    
-//     session_options.SetIntraOpNumThreads(1);
-//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
-//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
-//     std::vector<Ort::Session> outSessions = {Ort::Session(env, car_path, session_options),
-//                                              Ort::Session(env, plate_path, session_options),
-//                                              Ort::Session(env, craft_path, session_options),
-//                                              Ort::Session(env, refiner_path, session_options)};
-//     return outSessions;
-// } 
-
-
-// Ort::Session CreateSessionPlate(){
-
-//     const char* model_path = "ALPR_Cpp/models/plate_detection_cpu.onnx";
-//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
-
-//     Ort::SessionOptions session_options;    
-//     session_options.SetIntraOpNumThreads(1);
-//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
-//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
-//     return Ort::Session(env, model_path, session_options);
-// } 
-
-// Ort::Session CreateSessionCraft(){
-
-//     const char* model_path = "ALPR_Cpp/models/craft_cpu.onnx";
-//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
-
-//     Ort::SessionOptions session_options;    
-//     session_options.SetIntraOpNumThreads(1);
-//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
-//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
-//     return Ort::Session(env, model_path, session_options);
-// } 
-
-// Ort::Session CreateSessionRefiner(){
-
-//     const char* model_path = "ALPR_Cpp/models/refiner_cpu.onnx";
-//     static Ort::Env env = Ort::Env(ORT_LOGGING_LEVEL_WARNING , "test");    
-
-//     Ort::SessionOptions session_options;    
-//     session_options.SetIntraOpNumThreads(1);
-//     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
-//     session_options.AppendExecutionProvider_CUDA(OrtCUDAProviderOptions{});
-//     return Ort::Session(env, model_path, session_options);
-// } 
