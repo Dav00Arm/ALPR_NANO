@@ -34,11 +34,11 @@ FORMS += \
         mainui.ui
 
 INCLUDEPATH += /usr/include/opencv4 \
-#               /home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/include/torch/csrc/api/include \
-#               /home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/include/torch \
-#               /home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/include/torch/csrc/api/include/torch \
+#               ALPR_Cpp/torch/include/torch/csrc/api/include \
+#               ALPR_Cpp/torch/include/torch \
+#               ALPR_Cpp/torch/include/torch/csrc/api/include/torch \
 
 
 LIBS += -L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_video -lopencv_videoio
 
-#LIBS += -L/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/torch/lib -ltorch -ltorch_cuda -ltorch_cpu -ltorch_python -lc10 -lc10_cuda
+#LIBS += -LFULL_ALPR_NANO/ALPR_Cpp/torch/lib -ltorch -ltorch_cuda -ltorch_cpu -ltorch_python -lc10 -lc10_cuda

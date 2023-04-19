@@ -13,7 +13,7 @@
 double max_cosine_distance = 0.5;
 // int nn_budget = -1;
 double nms_max_overlap = 1.0;
-std::string path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/traced_ocr_model_fixed.pt";
+std::string path = "ALPR_Cpp/models/traced_ocr_model_fixed.pt";
 std::string spot_config = "spot_config.txt";
 
 // user_config yaml

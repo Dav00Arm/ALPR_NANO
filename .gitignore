@@ -1,0 +1,6 @@
+build
+ALPR_Cpp/torch
+ALPR_Cpp/tbb
+ALPR_Cpp/onnxruntime
+cmake-3.23.3
+.vscode
