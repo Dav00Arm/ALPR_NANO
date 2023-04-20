@@ -11,8 +11,7 @@ std::tuple<cv::Mat,std::vector<float>,float,float> letterbox(cv::Mat im, int new
     std::vector<float> new_shapes;
     std::vector<float> new_unpad;
     std::vector<float> ratio;
-    double dw,dh;
-
+    float dw,dh;
     shape.push_back(im.size().height);
     shape.push_back(im.size().width);
     new_shapes.push_back(new_shape);
@@ -28,6 +27,7 @@ std::tuple<cv::Mat,std::vector<float>,float,float> letterbox(cv::Mat im, int new
     new_unpad.push_back(int(std::round(shape[0]*r)));
     dw = new_shapes[1] - new_unpad[0];
     dh = new_shapes[0] - new_unpad[1];
+
     if (auto_){
         dw = int(dw) % stride;
         dh = int(dh) % stride;
@@ -44,6 +44,7 @@ std::tuple<cv::Mat,std::vector<float>,float,float> letterbox(cv::Mat im, int new
 
     dw /= 2;
     dh /= 2;
+
     if ((shape[0] != new_unpad[1]) && (shape[1] != new_unpad[0])){
         cv::resize(im,im,cv::Size(new_unpad[0],new_unpad[1]),cv::INTER_LINEAR);
     }

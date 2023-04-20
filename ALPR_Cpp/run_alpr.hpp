@@ -11,7 +11,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
     cv::Size label_size(labels[0]->width(), labels[0]->height());
  
     std::cout<<"Reading cameras"<<std::endl;
-    CameraStreamer cam(labels, cam_names ,capture_source);
+    CameraStreamer cam(cam_names ,capture_source);
     std::cout<<"Cameras are read successfully"<<std::endl;
 
     if (!file)
@@ -21,8 +21,8 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
         for(int i=0;i<cam.initialFrames.size();i++)
         // for(int i=0;i<1;i++)
         {   
-            // cam_img = cam.initialFrames[i];
-            cv::Mat cam_img = cv::imread("PN_car.jpg");
+            cam_img = cam.initialFrames[i];
+            // cv::Mat cam_img = cv::imread("PN_car.jpg");
             for(int j=0;j<max_spots;j++)
             {
                 SpotDrawing ui(cam_img,"CCTV "+std::to_string(i)); 
@@ -87,8 +87,11 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
         {
             cv::Mat frame;
             std::vector<cv::Mat> ill_frames;
-            if (cam.frame_queue[cam_id].try_pop(frame))
-            if(true)
+            bool gotFrame = cam.frame_queue[cam_id].try_pop(frame);
+            // if (cam.frame_queue[cam_id].try_pop(frame))
+            std::cout<<"gotFrame == "<<gotFrame<<std::endl;
+            // std::cout<<"frame.empty(): "<<frame.empty()<<std::endl;
+            if(gotFrame) // && !frame.empty()
             {                
                 // frame = cv::imread("PN_car2.jpg");
                 std::vector<std::vector<cv::Point>> camera_spots = bboxes[cam_id];

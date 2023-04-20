@@ -27,7 +27,7 @@ link_directories("/usr/bin/curl")
 set(UI_FILES "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_UI/mainui.ui")
 qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 
-add_executable(ALPR ALPR_Cpp/main_test.cpp ALPRUI/mainui.cpp ALPRUI/mainui.h ${UI_HEADERS} ) # 
+add_executable(ALPR ALPR_Cpp/tst.cpp) #  main_test.cpp ALPRUI/mainui.cpp ALPRUI/mainui.h ${UI_HEADERS}
 
 target_link_libraries(ALPR PRIVATE Qt5::Widgets tbb ${OpenCV_LIBS} ${TORCH_LIBRARIES} jsoncpp curl onnxruntime JetsonGPIO::JetsonGPIO)
 set_property(TARGET ALPR PROPERTY CXX_STANDARD 14)

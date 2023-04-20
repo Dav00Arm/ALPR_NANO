@@ -3,7 +3,6 @@
 #include <thread>
 #include <vector>
 #include <tbb/concurrent_queue.h>
-// #include <opencv2/opencv.hpp>
 
 
 // Video capture with threads. 
@@ -20,9 +19,10 @@ public:
     //this holds thread(s) which run the camera capture process
     std::vector<std::thread*> camera_thread;
     std::vector<cv::Mat> initialFrames;
+
     //Constructor for IP Camera capture
 
-    CameraStreamer(std::vector<QLabel*> labels_, std::vector<std::string> cam_names_, std::vector<std::string> stream_source)
+    CameraStreamer(std::vector<std::string> cam_names_, std::vector<std::string> stream_source)
     {
 
         camera_source = stream_source;
@@ -44,11 +44,9 @@ public:
         //initialize and start the camera capturing process(es)
         void startMultiCapture()
         {
-
+            tbb::concurrent_queue<cv::Mat> q;
             cv::VideoCapture capture;
             std::thread* t;
-            // tbb::concurrent_queue<cv::Mat> *q;
-            tbb::concurrent_queue<cv::Mat> q;
 
             for (int i = 0; i < camera_count; i++)
             {
@@ -73,7 +71,7 @@ public:
                 //Put thread to the vector
                 camera_thread.push_back(t);
                 //Make a queue instance
-                tbb::concurrent_queue<cv::Mat> q; //Seg fault here when car detection works with gpu
+                tbb::concurrent_queue<cv::Mat> q; //Seg fault here when car detection works with gpu (Solved)
                 //Put queue to the vector
                 frame_queue.push_back(q);
             }
@@ -92,7 +90,7 @@ public:
                     }
                 }
         }
-        //main camera capturing process which will be done by the thread(s)
+
         void captureFrame(int index)
         {
             cv::VideoCapture capture = camera_capture[index];
@@ -101,12 +99,21 @@ public:
                 cv::Mat frame;
                 //Grab frame from camera capture
                 (capture) >> frame;
-                frame_queue[index].try_pop(frame);
-                //Put frame to the queue
-                frame_queue[index].push(frame);
-                //relase frame resource
-                frame.release();
 
+                if (frame.empty()) {
+                    std::cout << "Lost connection with camera " << index << ", attempting to reconnect..." << std::endl;
+                    while (!capture.open(camera_source[index])) {
+                        std::cout << "Failed to reconnect to camera " << index << ", will retry in 5 seconds..." << std::endl;
+                        std::this_thread::sleep_for(std::chrono::seconds(5));
+                    }
+                    std::cout << "Reconnected to camera " << index << std::endl;
+                } else {
+                    frame_queue[index].try_pop(frame);
+                    //Put frame to the queue
+                    frame_queue[index].push(frame);
+                    //release frame resource
+                    frame.release();
+                }
             }
         }
 };

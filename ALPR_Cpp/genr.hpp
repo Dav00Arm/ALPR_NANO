@@ -23,9 +23,9 @@ torch::Tensor xywh2xyxy(torch::Tensor x)
 // Scaling coordinates
 torch::Tensor scale_coords(std::vector<double> img1_shape,torch::Tensor coords,std::vector<double> img0_shape){
     
-    double gain = std::min((double) (img1_shape[0] / img0_shape[0]),double(img1_shape[1] / img0_shape[1]));
-    double pad1 = (img1_shape[1] - img0_shape[1]*gain)/ 2;
-    double pad2 = (img1_shape[0] - img0_shape[0]*gain)/ 2; 
+    float gain = std::min((double) (img1_shape[0] / img0_shape[0]),double(img1_shape[1] / img0_shape[1]));
+    float pad1 = (img1_shape[1] - img0_shape[1]*gain)/ 2;
+    float pad2 = (img1_shape[0] - img0_shape[0]*gain)/ 2; 
 
     coords.index({torch::indexing::Slice(0,torch::indexing::None),0}) -= pad1;
     coords.index({torch::indexing::Slice(0,torch::indexing::None),2}) -= pad1;

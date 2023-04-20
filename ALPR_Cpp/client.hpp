@@ -4,6 +4,12 @@
 #include <string.h>
 #include <unordered_map>
 #include <iterator>
+#include <string>
+#include <cstring>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include "string.h"
 #include "curl/curl.h"
 #include <json/json.h>
 // #undef FALSE
@@ -215,10 +221,68 @@ curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
   
 
   retcode = TRUE;
-cleanup:
+  cleanup:
   curl_slist_free_all(headers);
   curl_easy_cleanup(curl);
   // cJSON_Delete(root);
   // free(json);
   return retcode;
+}
+
+void OpenGate(int state){
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1) {
+        std::cerr << "Failed to create socket\n";
+        return ;
+    }
+
+    std::string ip = "192.168.2.214";
+    int port = 80;
+
+    struct sockaddr_in server_address;
+    server_address.sin_family = AF_INET;
+    server_address.sin_addr.s_addr = inet_addr(ip.c_str());
+    server_address.sin_port = htons(port);
+
+    if (connect(sock, (struct sockaddr*)&server_address, sizeof(server_address)) != 0) {
+        std::cerr << "Failed to connect to server\n";
+        return ;
+    }
+
+    char message[100];
+    if(state == 1){
+      sprintf(message, "GET %s HTTP/1.1\r\n\r\n", "/api/ForceOpen");
+    }
+    else if(state == 0){
+      sprintf(message, "GET %s HTTP/1.1\r\n\r\n", "/api/ForceClose");
+
+    }
+    char openCMD[20] = "/api/ForceOpen";
+    char closeCMD[20] = "/api/ForceClose";
+
+
+    if (send(sock, message, strlen(message), 0) == -1) {
+        std::cerr << "Failed to send data\n";
+        return ;
+    }
+    
+
+    char buffer[1024] = {0};
+    if (recv(sock, buffer, 1024, 0) == -1) {
+        std::cerr << "Failed to receive data\n";
+        return ;
+    }
+
+    if(strstr(buffer, "Barrier Force Close") != 0)
+    {
+        std::cout << "Barrier is Close" << std::endl;
+    }
+
+    else if(strstr(buffer, "Barrier Force Open") != 0)
+    {
+        std::cout << "Barrier is Open" << std::endl;
+    }
+
+    close(sock);
+
 }

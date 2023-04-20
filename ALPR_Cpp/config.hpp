@@ -19,15 +19,15 @@
 // Pixmap options
 cv::Point org(25, 50);
 cv::Scalar color(209, 121, 27);
-double fontScale = 1.5;
+float fontScale = 1.5;
 int thickness = 2;
 int fontFace = cv::FONT_HERSHEY_SIMPLEX;
 
 
 // All configurations for the program. 
-double max_cosine_distance = 0.5; 
+float max_cosine_distance = 0.5; 
 // int nn_budget = -1;
-double nms_max_overlap = 1.0;
+float nms_max_overlap = 1.0;
 std::string path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/ocr(PN).pt";
 std::string spot_config = "spot_config.txt";
 // New width and height

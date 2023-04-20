@@ -115,7 +115,6 @@ std::tuple<std::string,float> ocr_run(std::vector<cv::Mat> lines,torch::jit::Mod
 
         plate += prediction;
         conf += confidence_score[0].item<float>();
-        cv::imwrite(plate+".jpg",line);
         
     }
     conf = conf / lines.size();
