@@ -31,11 +31,11 @@ void draw_plates(cv::Mat image, std::vector<std::vector<std::vector<int>>> bboxe
 }
 
 // License plate detection main call function
-std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> 
-    detect_plate_onnx_id(cv::Mat cur_frame, std::vector<cv::Mat> frames, std::vector<std::vector<std::vector<int>>> car_boxes){
+std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, int>> 
+    detect_plate_onnx_id(cv::Mat cur_frame, std::vector<cv::Mat> frames, std::vector<std::vector<std::vector<int>>> car_boxes, std::vector<int> labels){
     
     Predictor_ONNX model;
-    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out;
+    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, int>> out;
     // std::unordered_map<int, std::vector<std::vector<int>>> car_id;
     std::vector<cv::Mat> img;
     std::vector<int> conf;
@@ -60,7 +60,7 @@ std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector
             img.push_back(cropped);
             
         }
-        out[j] = {img, bbox};
+        out[j] = {img, bbox, labels[j]};
         img.clear();
         bbox.clear();
     }
