@@ -7,8 +7,8 @@ using namespace std::chrono;
 // Setup for Craft and Refiner infernence.
 
 //PATHS OF CRAFT AND REFINER
-const char* craft = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/craft_cpu.onnx";
-const char* refinet = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/refiner_cpu.onnx";
+const char* craft = "ALPR_Cpp/models/craft_cpu.onnx";
+const char* refinet = "ALPR_Cpp/models/refiner_cpu.onnx";
 
 //SESSION INFO
 Ort::MemoryInfo memory_info = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator,OrtMemTypeCPU);
@@ -16,10 +16,10 @@ Ort::Env env;
 Ort::AllocatorWithDefaultOptions ort_alloc;
 
 //CREATE SESSIONS
-Ort::Session craft_session = Ort::Session(env,craft,Ort::SessionOptions{ nullptr });
-Ort::Session refinet_session = Ort::Session(env,refinet,Ort::SessionOptions{ nullptr });
-// Ort::Session craft_session = sessions.SessionCraft();
-// Ort::Session refinet_session = sessions.SessionRefiner();
+// Ort::Session craft_session = Ort::Session(env,craft,Ort::SessionOptions{ nullptr });
+// Ort::Session refinet_session = Ort::Session(env,refinet,Ort::SessionOptions{ nullptr });
+Ort::Session craft_session = sessions.SessionCraft();
+Ort::Session refinet_session = sessions.SessionRefiner();
 
 //DEFINE INPUT/OUTPUT SHAPES
 std::vector<int64_t> inputShapeCraft {1, 3, 100, 100};

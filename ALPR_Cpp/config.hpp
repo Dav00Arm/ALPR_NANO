@@ -27,8 +27,9 @@ int fontFace = cv::FONT_HERSHEY_SIMPLEX;
 // All configurations for the program. 
 float max_cosine_distance = 0.5; 
 // int nn_budget = -1;
+
 float nms_max_overlap = 1.0;
-std::string path = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/ocr(PN).pt";
+std::string path = "ALPR_Cpp/models/ocr(PN).pt";
 std::string spot_config = "spot_config.txt";
 // New width and height
 

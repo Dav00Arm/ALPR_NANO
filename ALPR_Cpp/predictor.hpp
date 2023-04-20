@@ -14,7 +14,7 @@ class Predictor_ONNX{
     std::vector<int64_t> outputShape1 = { 1, numClasses, 2};
     std::vector<int64_t> outputShape2 = { 1, numClasses, 4};
 
-    const char* net = "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/models/plate_detection_cpu.onnx";
+    const char* net = "ALPR_Cpp/models/plate_detection_cpu.onnx";
     Ort::MemoryInfo memory_info = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator,OrtMemTypeCPU);
     Ort::Env env;
     Ort::SessionOptions session_options;

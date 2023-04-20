@@ -113,11 +113,12 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
 
                 std::vector<cv::Mat> car_images;
                 std::vector<std::vector<std::vector<int>>> car_boxes;
+                std::vector<int> labels;
                 std::cout<<"Car detection proflie\n";
                 call_ram_info();
-                std::tie(car_images, car_boxes) = car_detection_yolo_one_id(frame,32,false,320);
+                std::tie(car_images, car_boxes, labels) = car_detection_yolo_one_id(frame,32,false,320);
 
-                std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out_plate;
+                std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, int>> out_plate;
                 std::vector<std::vector<std::vector<int>>> bbox;
                 if(car_images.size() > 0){
                     std::unordered_map<int, cv::Mat> cam_images;
@@ -125,13 +126,14 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                 }
                 std::cout<<"BEFORE Plate detection proflie\n";
                 call_ram_info();
-                out_plate = detect_plate_onnx_id(frame, car_images, car_boxes);
+                out_plate = detect_plate_onnx_id(frame, car_images, car_boxes, labels);
                 std::cout<<"AFTER Plate detection proflie\n";
                 call_ram_info();
                 if(out_plate.size()>0){
                     std::unordered_map<int, cv::Mat> spot_dict;
                     std::unordered_map<int, std::string> current_spot_dict;
-                    std::tie(spot_dict, plate_zone_read, current_spot_dict, plate_zone) = check_box(frame, cam_id, bboxes[cam_id], out_plate, plate_zone_read, plate_zone);
+                    std::unordered_map<int, int> labels_dict;
+                    std::tie(spot_dict, plate_zone_read, current_spot_dict, plate_zone, labels_dict) = check_box(frame, cam_id, bboxes[cam_id], out_plate, plate_zone_read, plate_zone);
                     for(auto spot_dict_pair: current_spot_dict){
                         auto key = spot_dict_pair.first;
                         status[cam_id][key] = spot_dict_pair.second;

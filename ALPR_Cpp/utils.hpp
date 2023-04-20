@@ -8,13 +8,15 @@ int time_now(){
 
 // Check if license plate box is in drawn zone.
 std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
-    std::unordered_map<int, std::string>,std::vector<std::vector<std::vector<std::vector<int>>>>>
+    std::unordered_map<int, std::string>,std::vector<std::vector<std::vector<std::vector<int>>>>,
+    std::unordered_map<int, int>>
     check_box(cv::Mat frame, int cam_id, std::vector<std::vector<cv::Point>> spots, 
-    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> all_coordinates, std::vector<std::vector<int>> plate_read,
+    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, int>> all_coordinates, std::vector<std::vector<int>> plate_read,
     std::vector<std::vector<std::vector<std::vector<int>>>> plate_zone){
     
     std::unordered_map<int, cv::Mat> spot_dict; // NEW PLATES TO READ
     std::unordered_map<int, std::string> current_spot_dict;
+    std::unordered_map<int, int> labels_dict;
     
     for(int s=0; s<spots.size(); s++){
         current_spot_dict[s] = "Free";
@@ -23,6 +25,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
     for(auto pair: all_coordinates){
         std::vector<cv::Mat> imgs = std::get<0>(pair.second);
         std::vector<std::vector<std::vector<int>>> boxes = std::get<1>(pair.second);
+        int label = std::get<2>(pair.second);
         
         for(int j=0; j<boxes.size(); j++){
             for(int i=0; i<spots.size(); i++){
@@ -38,6 +41,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
                         int y2 = boxes[j][1][1]+10;
                         plate_zone[cam_id][i] = {{x1, y1}, {x2, y2}};
                         spot_dict[i] = imgs[j];
+                        labels_dict[i] = label;
                     }
 
                     // The plate is not in the zone
@@ -63,7 +67,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
             }
         }
     }
-    return {spot_dict, plate_read, current_spot_dict, plate_zone};
+    return {spot_dict, plate_read, current_spot_dict, plate_zone, labels_dict};
 }
 
 // Splits string with given delimeter (the same as python split()).

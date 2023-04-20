@@ -1,4 +1,4 @@
-#include "/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/mainui.h"
+#include "ALPRUI/mainui.h"
 #include <QtWidgets>
 #include <iostream>
 #include <cuda_runtime.h>
@@ -6,7 +6,6 @@
 // MAIN function
 int main(int argc, char *argv[])
 {   
-
     QApplication a(argc, argv);
     MainUI w;
     
@@ -51,7 +50,7 @@ int main(int argc, char *argv[])
     label_4->resize(label_1->width(), label_1->height());
 
     QPushButton *settings = w.findChild<QPushButton*>("cameraSettings");
-    settings->setIcon(QIcon("/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/images/settings.png")); // set the icon
+    settings->setIcon(QIcon("ALPRUI/images/settings.png")); // set the icon
     settings->setIconSize(QSize(width/47, height/30)); // set the icon size      
     settings->setFixedSize(width/47, height/30); // set the same width and height
     settings->move(width-65, 0);

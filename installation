@@ -1,3 +1,9 @@
+OpenCV
+sudo apt-get update
+sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libv4l-dev
+sudo apt-get install libopencv-dev
+
 Jsoncpp
 sudo apt-get install libjsoncpp-dev
 
@@ -12,6 +18,7 @@ sudo apt-get install qt5-default
 
 Cmake 
 cd cmake-3.23.3
+sudo apt-get install openssl libssl-dev
 sudo ./configure
 sudo make -j8
 sudo make install -j8

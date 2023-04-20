@@ -1,4 +1,4 @@
-#include "/home/jets/Desktop/FULL_ALPR_NANO/ALPR_Cpp/run_alpr.hpp"
+#include "ALPR_Cpp/run_alpr.hpp"
 #include "mainui.h"
 #include "ui_mainui.h"
 #include <QScreen>
@@ -16,7 +16,7 @@ MainUI::MainUI(QWidget *parent) :
     ui(new Ui::MainUI)
 {
     ui->setupUi(this);
-    QPixmap bckg_img("/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/images/background.jpg");
+    QPixmap bckg_img("ALPRUI/images/background.jpg");
     QPalette palette;
     palette.setBrush(this->backgroundRole(), QBrush(bckg_img));
     this->setPalette(palette);
@@ -391,7 +391,7 @@ void MainUI::on_resetLogin_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
     
-    QPixmap bckg_img("/home/jets/Desktop/FULL_ALPR_NANO/ALPRUI/images/background.jpg");
+    QPixmap bckg_img("ALPRUI/images/background.jpg");
     QPalette palette;
     palette.setBrush(this->backgroundRole(), QBrush(bckg_img));
     this->setPalette(palette);
