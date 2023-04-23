@@ -21,7 +21,7 @@ std::vector<float> onnxInput(cv::Mat img){
 }
 
 // Main car detection call function.
-std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, std::vector<int>> car_detection_yolo_one_id(cv::Mat image, int stride,bool pt,int imgsz)
+std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, std::vector<std::string>> car_detection_yolo_one_id(cv::Mat image, int stride,bool pt,int imgsz)
 {
     int bs = 1;
     cv::Mat img,im0,cropped;
@@ -33,7 +33,7 @@ std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, std
     std::vector<double> im0_shape;
     std::vector<cv::Mat> out;
     std::vector<std::vector<std::vector<int>>> draw_boxes;
-    std::vector<int> labels; 
+    std::vector<std::string> labels; 
 
     img = std::get<0>(letterbox(image,imgsz,pt,false,true,stride));
 
@@ -42,6 +42,7 @@ std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, std
     std::vector<std::vector<float>> y;
     std::vector<torch::Tensor> pred;
     torch::Tensor cls = torch::zeros(4);
+    std::unordered_map<int, std::string> vehicle_classes = {{2, "car"}, {3, "motorcycle"}, {5, "bus"}, {7, "truck"}};
     cls[0] = 2; // car
     cls[1] = 3; // motorcycle
     cls[2] = 5; // bus
@@ -69,7 +70,7 @@ std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, std
                 label = det[j][5].item<int>();
                 
                 out.push_back(cropped);
-                labels.push_back(label);
+                labels.push_back(vehicle_classes[label]);
                 std::vector<std::vector<int>> one_box = {{xyxy[0].item<int>(), xyxy[1].item<int>()},{xyxy[2].item<int>(), xyxy[3].item<int>()}};
                 draw_boxes.push_back({one_box});
 

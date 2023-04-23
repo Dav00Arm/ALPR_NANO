@@ -113,7 +113,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
 
                 std::vector<cv::Mat> car_images;
                 std::vector<std::vector<std::vector<int>>> car_boxes;
-                std::vector<int> labels;
+                std::vector<std::string> labels;
                 std::cout<<"Car detection proflie\n";
                 call_ram_info();
                 std::tie(car_images, car_boxes, labels) = car_detection_yolo_one_id(frame,32,false,320);
@@ -126,14 +126,19 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                 }
                 std::cout<<"BEFORE Plate detection proflie\n";
                 call_ram_info();
-                out_plate = detect_plate_onnx_id(frame, car_images, car_boxes, labels);
+                out_plate = detect_plate_onnx_id(frame, car_images, car_boxes);
                 std::cout<<"AFTER Plate detection proflie\n";
                 call_ram_info();
                 if(out_plate.size()>0){
                     std::unordered_map<int, cv::Mat> spot_dict;
                     std::unordered_map<int, std::string> current_spot_dict;
-                    std::unordered_map<int, int> labels_dict;
-                    std::tie(spot_dict, plate_zone_read, current_spot_dict, plate_zone, labels_dict) = check_box(frame, cam_id, bboxes[cam_id], out_plate, plate_zone_read, plate_zone);
+                    std::unordered_map<int, int> car_ind_dict;
+                    std::tie(spot_dict, plate_zone_read, current_spot_dict, plate_zone, car_ind_dict) = check_box(frame, cam_id, bboxes[cam_id], out_plate, plate_zone_read, plate_zone);
+                    
+                    std::unordered_map<int, std::string> car_colors_dict;
+                    CarColorClassifier color_classifier;
+                    car_colors_dict = color_classifier(car_images, car_ind_dict);
+
                     for(auto spot_dict_pair: current_spot_dict){
                         auto key = spot_dict_pair.first;
                         status[cam_id][key] = spot_dict_pair.second;
@@ -182,10 +187,20 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                                     std::vector<cv::Mat> lines = number_images[nm_img];
                                     std::cout<<"BEFORE OCR proflie\n";
                                     call_ram_info();
+
                                     std::tuple<std::string,float> out = ocr_run(lines, model_ocr, converter);
+
                                     std::cout<<"AFTER OCR proflie\n";
                                     call_ram_info();
+
                                     std::string prediction = RusPlateProcess(std::get<0>(out));
+
+                                    std::string label = labels[car_ind_dict[one_spot_dict.first]];
+                                    std::cout << label << std::endl;
+
+                                    std::string color = car_colors_dict[one_spot_dict.first];
+                                    std::cout << color << std::endl;
+                                    
                                     float conf = std::get<1>(out); 
                                     conf *= 100;
                                     std::cout<<prediction<<" "<<conf<<std::endl;
