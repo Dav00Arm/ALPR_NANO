@@ -16,7 +16,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
     
     std::unordered_map<int, cv::Mat> spot_dict; // NEW PLATES TO READ
     std::unordered_map<int, std::string> current_spot_dict;
-    std::unordered_map<int, int> labels_dict;
+    std::unordered_map<int, int> car_ind_dict;
     
     for(int s=0; s<spots.size(); s++){
         current_spot_dict[s] = "Free";
@@ -25,7 +25,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
     for(auto pair: all_coordinates){
         std::vector<cv::Mat> imgs = std::get<0>(pair.second);
         std::vector<std::vector<std::vector<int>>> boxes = std::get<1>(pair.second);
-        int label = std::get<2>(pair.second);
+        int car_ind = std::get<2>(pair.second);
         
         for(int j=0; j<boxes.size(); j++){
             for(int i=0; i<spots.size(); i++){
@@ -41,7 +41,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
                         int y2 = boxes[j][1][1]+10;
                         plate_zone[cam_id][i] = {{x1, y1}, {x2, y2}};
                         spot_dict[i] = imgs[j];
-                        labels_dict[i] = label;
+                        car_ind_dict[i] = car_ind;
                     }
 
                     // The plate is not in the zone
@@ -67,7 +67,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
             }
         }
     }
-    return {spot_dict, plate_read, current_spot_dict, plate_zone, labels_dict};
+    return {spot_dict, plate_read, current_spot_dict, plate_zone, car_ind_dict};
 }
 
 // Splits string with given delimeter (the same as python split()).

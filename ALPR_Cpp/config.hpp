@@ -14,6 +14,7 @@
 #include "craft.hpp"
 #include "ocr.hpp"
 #include "client.hpp"
+#include "car_color_classifier.hpp"
 
 
 // Pixmap options
