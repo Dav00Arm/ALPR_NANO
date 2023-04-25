@@ -33,7 +33,7 @@ std::string path = "ALPR_Cpp/models/ocr(PN).pt";
 std::string spot_config = "spot_config.txt";
 // New width and height
 
-int max_spots = 2, wait_time = 0;    
+int max_spots = 1, wait_time = 0;    
 cv::Mat cam_img;
 // torch::Tensor a;
 std::vector<std::vector<std::vector<cv::Point>>> bboxes;

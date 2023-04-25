@@ -189,15 +189,20 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                                     float conf = std::get<1>(out); 
                                     conf *= 100;
                                     std::cout<<prediction<<" "<<conf<<std::endl;
-
                                     if(prediction.size()<4){
                                         plate_zone[cam_id][one_spot_dict.first] = {};
                                     }
-                                    else if(prediction != last_preds[cam_id][one_spot_dict.first] && conf >= 97){
+                                    // else if(prediction != last_preds[cam_id][one_spot_dict.first] && conf >= 97){
+                                    else if(conf >= 97){
                                         last_preds[cam_id][one_spot_dict.first] = prediction;
                                         std::cout<<prediction<<std::endl;
                                         responses[cam_id][one_spot_dict.first] = true;
                                         // PostJSON(prepare_sending_data(mac_addresses[cam_id], std::to_string(cam_id), std::to_string(one_spot_dict.first), prediction, std::to_string((int)conf), currentDateTime()));
+                                        if(prediction == "35QP431"){
+                                            std::cout<<"OPENING THE GATE\n";
+                                            OpenGate(1);
+                                        }
+                                            
                                     }
                                     else if(conf < 97){
                                         plate_zone[cam_id][one_spot_dict.first] = {};
