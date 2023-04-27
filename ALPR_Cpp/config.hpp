@@ -6,6 +6,8 @@
 #include <opencv2/opencv.hpp>
 #include <torch/torch.h>
 #include <QLabel>
+#include <thread>
+#include <unistd.h> 
 #include "cameraStreamer.hpp"
 #include "draw_spots.hpp"
 #include "dtc.hpp"
@@ -15,6 +17,7 @@
 #include "ocr.hpp"
 #include "client.hpp"
 #include "car_color_classifier.hpp"
+// #include "run_alpr_multithreading.hpp"
 
 
 // Pixmap options
@@ -54,3 +57,5 @@ torch::jit::Module model_ocr = torch::jit::load(path);
 // };
 std::vector<std::string> mac_addresses = {"9c:14:63:64:ec:c0","9c:14:63:64:e5:f0","9c:14:63:64:e8:ac","9c:14:63:64:eb:0a","9c:14:63:64:e8:af"};
 
+
+bool run_status = true;

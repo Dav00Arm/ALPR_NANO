@@ -33,7 +33,7 @@ std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, std
     std::vector<double> im0_shape;
     std::vector<cv::Mat> out;
     std::vector<std::vector<std::vector<int>>> draw_boxes;
-    std::vector<std::string> labels; 
+    std::vector<std::string> pred_labels; 
 
     img = std::get<0>(letterbox(image,imgsz,pt,false,true,stride));
 
@@ -70,12 +70,12 @@ std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, std
                 label = det[j][5].item<int>();
                 
                 out.push_back(cropped);
-                labels.push_back(vehicle_classes[label]);
+                pred_labels.push_back(vehicle_classes[label]);
                 std::vector<std::vector<int>> one_box = {{xyxy[0].item<int>(), xyxy[1].item<int>()},{xyxy[2].item<int>(), xyxy[3].item<int>()}};
                 draw_boxes.push_back({one_box});
 
             }
         }
     }
-    return {out, draw_boxes, labels};
+    return {out, draw_boxes, pred_labels};
 }

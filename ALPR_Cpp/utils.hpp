@@ -1,5 +1,4 @@
 #include "check_polygon.hpp"
-// #include <opencv2/opencv.hpp>
 
 // Get current time.
 int time_now(){
@@ -7,12 +6,12 @@ int time_now(){
 }
 
 // Check if license plate box is in drawn zone.
-std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
-    std::unordered_map<int, std::string>,std::vector<std::vector<std::vector<std::vector<int>>>>,
+std::tuple<std::unordered_map<int, cv::Mat>, std::vector<int>,
+    std::unordered_map<int, std::string>, std::vector<std::vector<std::vector<int>>>,
     std::unordered_map<int, int>>
-    check_box(cv::Mat frame, int cam_id, std::vector<std::vector<cv::Point>> spots, 
-    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, int>> all_coordinates, std::vector<std::vector<int>> plate_read,
-    std::vector<std::vector<std::vector<std::vector<int>>>> plate_zone){
+    check_box(cv::Mat frame, std::vector<std::vector<cv::Point>> spots, 
+    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> all_coordinates, std::vector<int> plate_read,
+    std::vector<std::vector<std::vector<int>>> plate_zone){
     
     std::unordered_map<int, cv::Mat> spot_dict; // NEW PLATES TO READ
     std::unordered_map<int, std::string> current_spot_dict;
@@ -25,7 +24,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
     for(auto pair: all_coordinates){
         std::vector<cv::Mat> imgs = std::get<0>(pair.second);
         std::vector<std::vector<std::vector<int>>> boxes = std::get<1>(pair.second);
-        int car_ind = std::get<2>(pair.second);
+        int car_ind = pair.first;
         
         for(int j=0; j<boxes.size(); j++){
             for(int i=0; i<spots.size(); i++){
@@ -34,34 +33,34 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
                     current_spot_dict[i] = "Busy";
 
                     // A new car came, and plate isn't recognized yet.
-                    if(plate_zone[cam_id][i].size() == 0){
+                    if(plate_zone[i].size() == 0){
                         int x1 = boxes[j][0][0]-10;
                         int y1 = boxes[j][0][1]-10;
                         int x2 = boxes[j][1][0]+10;
                         int y2 = boxes[j][1][1]+10;
-                        plate_zone[cam_id][i] = {{x1, y1}, {x2, y2}};
+                        plate_zone[i] = {{x1, y1}, {x2, y2}};
                         spot_dict[i] = imgs[j];
                         car_ind_dict[i] = car_ind;
                     }
 
                     // The plate is not in the zone
-                    else if(plate_zone[cam_id][i].size() != 0 ){
-                        bool plate_in_zone = checkInside(plate_zone[cam_id][i], boxes[j]);
+                    else if(plate_zone[i].size() != 0 ){
+                        bool plate_in_zone = checkInside(plate_zone[i], boxes[j]);
                         if(plate_in_zone == false){
-                            if(plate_read[cam_id][i] == -1){
-                                plate_read[cam_id][i] = time_now();
+                            if(plate_read[i] == -1){
+                                plate_read[i] = time_now();
                             }
-                            if(time_now() - plate_read[cam_id][i] >= 3){
-                                plate_zone[cam_id][i] = {};
-                                plate_read[cam_id][i] = -1;
+                            if(time_now() - plate_read[i] >= 3){
+                                plate_zone[i] = {};
+                                plate_read[i] = -1;
                             }
                         }
                     }
                 }
                 // Draw the zone 
-                // if(plate_zone[cam_id][i].size() != 0){
-                //     cv::Point p1(plate_zone[cam_id][i][0][0], plate_zone[cam_id][i][0][1]);
-                //     cv::Point p2(plate_zone[cam_id][i][1][0], plate_zone[cam_id][i][1][1]);
+                // if(plate_zone[i].size() != 0){
+                //     cv::Point p1(plate_zone[i][0][0], plate_zone[i][0][1]);
+                //     cv::Point p2(plate_zone[i][1][0], plate_zone[i][1][1]);
                 //     cv::rectangle(frame, p1, p2, cv::Scalar(0,255,255), 2);
                 // }
             }
