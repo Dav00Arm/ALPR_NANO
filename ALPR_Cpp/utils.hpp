@@ -11,7 +11,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
     std::unordered_map<int, std::string>,std::vector<std::vector<std::vector<std::vector<int>>>>,
     std::unordered_map<int, int>>
     check_box(cv::Mat frame, int cam_id, std::vector<std::vector<cv::Point>> spots, 
-    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, int>> all_coordinates, std::vector<std::vector<int>> plate_read,
+    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> all_coordinates, std::vector<std::vector<int>> plate_read,
     std::vector<std::vector<std::vector<std::vector<int>>>> plate_zone){
     
     std::unordered_map<int, cv::Mat> spot_dict; // NEW PLATES TO READ
@@ -25,7 +25,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
     for(auto pair: all_coordinates){
         std::vector<cv::Mat> imgs = std::get<0>(pair.second);
         std::vector<std::vector<std::vector<int>>> boxes = std::get<1>(pair.second);
-        int car_ind = std::get<2>(pair.second);
+        int car_ind = pair.first;
         
         for(int j=0; j<boxes.size(); j++){
             for(int i=0; i<spots.size(); i++){

@@ -120,7 +120,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                 call_ram_info();
                 std::tie(car_images, car_boxes, labels) = car_detection_yolo_one_id(frame,32,false,320);
 
-                std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>, int>> out_plate;
+                std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out_plate;
                 std::vector<std::vector<std::vector<int>>> bbox;
                 if(car_images.size() > 0){
                     std::unordered_map<int, cv::Mat> cam_images;
