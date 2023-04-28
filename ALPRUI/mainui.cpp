@@ -359,15 +359,11 @@ void MainUI::on_HomeButton_clicked()
     if(currentList != -1){
         SaveWhiteList();
     }
-    // std::cout<< "name_size: " << names.size()<<std::endl;
     if(names.size()>0){
         std::string cameraState = cameraChecker(names, urls);
-        // std::cout<< "CameraChecker: " << (cameraState == "True")<<std::endl;
         ui->stackedWidget->setCurrentIndex(1);
         if(cameraState == "True"){
             ui->stackedWidget->setCurrentIndex(1);
-            // QMetaObject::invokeMethod(ui->stackedWidget, "setCurrentIndex", Q_ARG(int, 1));
-            // std::cout<< "CameraChecker: " << (cameraState == "True")<<std::endl;
 
             QLabel *label1 = ui->cam1;
             QLabel *label2 = ui->cam2;
@@ -376,6 +372,7 @@ void MainUI::on_HomeButton_clicked()
             std::vector<QLabel*> labels = {label1, label2, label3, label4};
             run_status = true;  
             alpr(labels, names, urls);
+            
         }
         else{
             ui->CheckBoxWarning->show();

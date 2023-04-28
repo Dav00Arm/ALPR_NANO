@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <thread>
 #include <unistd.h> 
+#include <mutex>
 #include "cameraStreamer.hpp"
 #include "draw_spots.hpp"
 #include "dtc.hpp"
@@ -17,7 +18,7 @@
 #include "ocr.hpp"
 #include "client.hpp"
 #include "car_color_classifier.hpp"
-// #include "run_alpr_multithreading.hpp"
+
 
 
 // Pixmap options

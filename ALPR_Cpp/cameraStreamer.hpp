@@ -87,8 +87,8 @@ public:
                     camera_thread[i]->join();
                     cap.release();
                     std::cout << "Capture " << i << " released" << std::endl;
-                    }
                 }
+            }
         }
 
         void captureFrame(int index)
@@ -99,7 +99,7 @@ public:
                 cv::Mat frame;
                 //Grab frame from camera capture
                 (capture) >> frame;
-
+                std::mutex frame_queue_mutex;
                 if (frame.empty()) {
                     std::cout << "Lost connection with camera " << index << ", attempting to reconnect..." << std::endl;
                     while (!capture.open(camera_source[index])) {
@@ -108,6 +108,7 @@ public:
                     }
                     std::cout << "Reconnected to camera " << index << std::endl;
                 } else {
+                    std::lock_guard<std::mutex> lock(frame_queue_mutex);
                     frame_queue[index].try_pop(frame);
                     //Put frame to the queue
                     frame_queue[index].push(frame);
