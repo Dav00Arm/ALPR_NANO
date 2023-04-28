@@ -257,9 +257,6 @@ void OpenGate(int state){
       sprintf(message, "GET %s HTTP/1.1\r\n\r\n", "/api/ForceClose");
 
     }
-    char openCMD[20] = "/api/ForceOpen";
-    char closeCMD[20] = "/api/ForceClose";
-
 
     if (send(sock, message, strlen(message), 0) == -1) {
         std::cerr << "Failed to send data\n";

@@ -44,7 +44,9 @@ std::vector<cv::Point> bbbox1;
 std::string p = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!pn$s&'()*+,-./:;<=>?@[\\]^_`{|}~"; //ՊՆՇՍՏ
 AttnLabelConverter converter(p);
 // torch::jit::Module model_ocr;
+torch::Device device(torch::kCUDA);
 torch::jit::Module model_ocr = torch::jit::load(path);
+// model_ocr.to(device);
 // std::vector<std::string> capture_source = {
 // "rtsp://admin:22dvcgwqw7@37.252.72.204:555/cam/realmonitor?channel=1&subtype=0",
 //        "rtsp://admin:22dvcgwqw7@37.252.72.204:556/cam/realmonitor?channel=1&subtype=0",

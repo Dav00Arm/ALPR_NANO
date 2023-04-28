@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
     a.setFont(font);
 
     QLabel *WelcomeLabel = w.findChild<QLabel*>("Welcome");
-    WelcomeLabel->setText("   Welcome");
+    WelcomeLabel->setText("      Welcome");
     QLabel *WelcomeLabel2 = w.findChild<QLabel*>("Welcome_2");
-    WelcomeLabel2->setText("   Welcome");
+    WelcomeLabel2->setText("      Welcome");
     //Center the Sign up box
     QWidget *CentralWidget = w.findChild<QWidget*>("CenterWidget"); //getting the widget by its name
     QWidget *CentralWidget2 = w.findChild<QWidget*>("CenterWidget_2"); //getting the widget by its name
@@ -88,70 +88,125 @@ int main(int argc, char *argv[])
     QCheckBox *camera3CheckBox = w.findChild<QCheckBox*>("camera3CheckBox");
     QCheckBox *camera4CheckBox = w.findChild<QCheckBox*>("camera4CheckBox");
 
+    QSpinBox *spotCount1SpinBox = w.findChild<QSpinBox*>("spinBox1");
+    QSpinBox *spotCount2SpinBox = w.findChild<QSpinBox*>("spinBox2");
+    QSpinBox *spotCount3SpinBox = w.findChild<QSpinBox*>("spinBox3");
+    QSpinBox *spotCount4SpinBox = w.findChild<QSpinBox*>("spinBox4");
+    spotCount1SpinBox->setRange(0, 3);
+    spotCount1SpinBox->setSpecialValueText("Number of zones");
+    spotCount2SpinBox->setRange(0, 3);
+    spotCount2SpinBox->setSpecialValueText("Number of zones");
+    spotCount3SpinBox->setRange(0, 3);
+    spotCount3SpinBox->setSpecialValueText("Number of zones");
+    spotCount4SpinBox->setRange(0, 3);
+    spotCount4SpinBox->setSpecialValueText("Number of zones");
+
+    int cameraLabelPosHeight = 0;
+    int cameraNameLineEdit = 27;
+    int whiteList = 90;
+    int cameraLineEdit = 59;
+    int cameraCheckBox = 59;
+    int spotCountSpinBox = 90;
+
+
     //Group 1
     camera1Label->setFixedSize(width/29, height/35);
-    camera1Label->move(5, 0);
+    camera1Label->move(5, cameraLabelPosHeight);
 
-    cameraName1LineEdit->setFixedSize(width/8, height/35);
-    cameraName1LineEdit->move(5, 27);
+    cameraName1LineEdit->setFixedSize(width/7, height/35);
+    cameraName1LineEdit->move(5, cameraNameLineEdit);
 
-    whiteList1->setFixedSize(width/16, height/35);
-    whiteList1->move(width/8+15, 27);
+    whiteList1->setFixedSize(width/14, height/35);
+    whiteList1->move(width/13.3, whiteList);
 
-    camera1LineEdit->setFixedSize(width/8, height/35);
-    camera1LineEdit->move(5, 59);
+    camera1LineEdit->setFixedSize(width/7, height/35);
+    camera1LineEdit->move(5, cameraLineEdit);
 
     camera1CheckBox->setFixedSize(width/16, height/35);
-    camera1CheckBox->move(width/8+15, 59);
+    camera1CheckBox->move(width/7+15, cameraCheckBox);
+
+    spotCount1SpinBox->setFixedSize(width/14, height/35);
+    spotCount1SpinBox->move(5, spotCountSpinBox);
+
+    cameraLabelPosHeight += 120;
+    cameraNameLineEdit += 120;
+    whiteList += 120;
+    cameraLineEdit += 120;
+    cameraCheckBox += 120;
+    spotCountSpinBox += 120;
 
     //Group 2
     camera2Label->setFixedSize(width/29, height/35);
-    camera2Label->move(5, 84);
+    camera2Label->move(5, cameraLabelPosHeight);
 
-    cameraName2LineEdit->setFixedSize(width/8, height/35);
-    cameraName2LineEdit->move(5, 111);
+    cameraName2LineEdit->setFixedSize(width/7, height/35);
+    cameraName2LineEdit->move(5, cameraNameLineEdit);
 
-    whiteList2->setFixedSize(width/16, height/35);
-    whiteList2->move(width/8+15, 111);
+    whiteList2->setFixedSize(width/14, height/35);
+    whiteList2->move(width/13.3, whiteList); 
 
-    camera2LineEdit->setFixedSize(width/8, height/35);
-    camera2LineEdit->move(5, 143);
+    camera2LineEdit->setFixedSize(width/7, height/35);
+    camera2LineEdit->move(5, cameraLineEdit);
 
     camera2CheckBox->setFixedSize(width/16, height/35);
-    camera2CheckBox->move(width/8+15, 143);
+    camera2CheckBox->move(width/7+15, cameraCheckBox);
+    
+    spotCount2SpinBox->setFixedSize(width/14, height/35);
+    spotCount2SpinBox->move(5, spotCountSpinBox);
+
+    cameraLabelPosHeight += 120;
+    cameraNameLineEdit += 120;
+    whiteList += 120;
+    cameraLineEdit += 120;
+    cameraCheckBox += 120;
+    spotCountSpinBox += 120;
 
     //Group 3
     camera3Label->setFixedSize(width/29, height/35);
-    camera3Label->move(5, 168);
+    camera3Label->move(5, cameraLabelPosHeight);
 
-    cameraName3LineEdit->setFixedSize(width/8, height/35);
-    cameraName3LineEdit->move(5, 195);
+    cameraName3LineEdit->setFixedSize(width/7, height/35);
+    cameraName3LineEdit->move(5, cameraNameLineEdit);
 
-    whiteList3->setFixedSize(width/16, height/35);
-    whiteList3->move(width/8+15, 195);
+    whiteList3->setFixedSize(width/14, height/35);
+    whiteList3->move(width/13.3, whiteList);
 
-    camera3LineEdit->setFixedSize(width/8, height/35);
-    camera3LineEdit->move(5, 227);
+    camera3LineEdit->setFixedSize(width/7, height/35);
+    camera3LineEdit->move(5, cameraLineEdit);
 
     camera3CheckBox->setFixedSize(width/16, height/35);
-    camera3CheckBox->move(width/8+15, 227);
+    camera3CheckBox->move(width/7+15, cameraCheckBox);
+
+    spotCount3SpinBox->setFixedSize(width/14, height/35);
+    spotCount3SpinBox->move(5, spotCountSpinBox);
+
+    cameraLabelPosHeight += 120;
+    cameraNameLineEdit += 120;
+    whiteList += 120;
+    cameraLineEdit += 120;
+    cameraCheckBox += 120;
+    spotCountSpinBox += 120;
 
     //Group 4
     camera4Label->setFixedSize(width/29, height/35);
-    camera4Label->move(5, 252);
+    camera4Label->move(5, cameraLabelPosHeight);
 
-    cameraName4LineEdit->setFixedSize(width/8, height/35);
-    cameraName4LineEdit->move(5, 279);
+    cameraName4LineEdit->setFixedSize(width/7, height/35);
+    cameraName4LineEdit->move(5, cameraNameLineEdit);
 
-    whiteList4->setFixedSize(width/16, height/35);
-    whiteList4->move(width/8+15, 279);
+    whiteList4->setFixedSize(width/14, height/35);
+    whiteList4->move(width/13.3, whiteList);
 
-    camera4LineEdit->setFixedSize(width/8, height/35);
-    camera4LineEdit->move(5, 311);
+    camera4LineEdit->setFixedSize(width/7, height/35);
+    camera4LineEdit->move(5, cameraLineEdit);
 
     camera4CheckBox->setFixedSize(width/16, height/35);
-    camera4CheckBox->move(width/8+15, 311);
+    camera4CheckBox->move(width/7+15, cameraCheckBox);
 
+    spotCount4SpinBox->setFixedSize(width/14, height/35);
+    spotCount4SpinBox->move(5, spotCountSpinBox);
+
+    int buttonsPos = spotCountSpinBox + 35;
 
     QTableWidget *table = w.findChild<QTableWidget*>("WhiteListTable");
     QPushButton *addLine = w.findChild<QPushButton*>("AddLine");
@@ -165,7 +220,7 @@ int main(int argc, char *argv[])
     AddLineWarning->move(width/2-30, 450);
     AddLineWarning->setFixedSize(width/10, height/40);
 
-    CheckBoxWarning->move(5, 350+height/24+10);
+    CheckBoxWarning->move(5, buttonsPos+60);
     CheckBoxWarning->setFixedSize(400, 20);
 
     WhiteListLabel->move(width/2-130, 15);
@@ -184,15 +239,15 @@ int main(int argc, char *argv[])
     
     QPushButton *saveButton = w.findChild<QPushButton*>("SaveButton");
     saveButton->setFixedSize(width/22,height/24);
-    saveButton->move(5, 350);
+    saveButton->move(5, buttonsPos);
 
     QPushButton *homeButton = w.findChild<QPushButton*>("HomeButton");
     homeButton->setFixedSize(width/22,height/24);
-    homeButton->move(width/22+10, 350);
+    homeButton->move(width/22+10, buttonsPos);
     
     QPushButton *resetLogin = w.findChild<QPushButton*>("resetLogin");
-    resetLogin->setFixedSize(width/22,height/24);
-    resetLogin->move(width/22+10+width/22+5, 350);
+    resetLogin->setFixedSize(width/21.1,height/24);
+    resetLogin->move(width/22+10+width/22+5, buttonsPos);
     
     saveButton->setFont(fontButtons);
     homeButton->setFont(fontButtons);

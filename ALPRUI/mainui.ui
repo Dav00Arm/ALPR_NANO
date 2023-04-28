@@ -72,6 +72,9 @@ QPushButton#SignIn_button{
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
       <widget class="QWidget" name="SignUp">
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
@@ -608,9 +611,9 @@ QLabel#cam4{
         <property name="geometry">
          <rect>
           <x>80</x>
-          <y>230</y>
+          <y>66</y>
           <width>236</width>
-          <height>17</height>
+          <height>21</height>
          </rect>
         </property>
        </widget>
@@ -646,7 +649,7 @@ QLabel#cam4{
           <x>80</x>
           <y>100</y>
           <width>236</width>
-          <height>17</height>
+          <height>21</height>
          </rect>
         </property>
        </widget>
@@ -655,8 +658,8 @@ QLabel#cam4{
          <rect>
           <x>320</x>
           <y>100</y>
-          <width>61</width>
-          <height>16</height>
+          <width>111</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="text">
@@ -667,8 +670,8 @@ QLabel#cam4{
         <property name="geometry">
          <rect>
           <x>80</x>
-          <y>60</y>
-          <width>41</width>
+          <y>30</y>
+          <width>71</width>
           <height>33</height>
          </rect>
         </property>
@@ -719,8 +722,8 @@ QLabel#cam4{
        <widget class="QPushButton" name="WhiteList1">
         <property name="geometry">
          <rect>
-          <x>70</x>
-          <y>150</y>
+          <x>160</x>
+          <y>270</y>
           <width>80</width>
           <height>15</height>
          </rect>
@@ -735,10 +738,10 @@ QLabel#cam4{
        <widget class="QPushButton" name="WhiteList2">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>150</y>
-          <width>80</width>
-          <height>15</height>
+          <x>320</x>
+          <y>100</y>
+          <width>131</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="cursor">
@@ -751,8 +754,8 @@ QLabel#cam4{
        <widget class="QPushButton" name="WhiteList3">
         <property name="geometry">
          <rect>
-          <x>250</x>
-          <y>150</y>
+          <x>240</x>
+          <y>280</y>
           <width>80</width>
           <height>15</height>
          </rect>
@@ -827,10 +830,10 @@ QLabel#cam4{
        <widget class="QPushButton" name="SaveButton">
         <property name="geometry">
          <rect>
-          <x>910</x>
-          <y>310</y>
-          <width>241</width>
-          <height>111</height>
+          <x>200</x>
+          <y>130</y>
+          <width>121</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="font">
@@ -876,8 +879,8 @@ QLabel#cam4{
         <property name="geometry">
          <rect>
           <x>430</x>
-          <y>80</y>
-          <width>81</width>
+          <y>30</y>
+          <width>121</width>
           <height>16</height>
          </rect>
         </property>
@@ -904,9 +907,9 @@ QLabel#cam4{
        <widget class="QLabel" name="CheckBoxWarning">
         <property name="geometry">
          <rect>
-          <x>350</x>
-          <y>40</y>
-          <width>201</width>
+          <x>170</x>
+          <y>30</y>
+          <width>61</width>
           <height>31</height>
          </rect>
         </property>
@@ -940,6 +943,58 @@ QLabel#cam4{
         <property name="text">
          <string>Reset 
  password</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBox1">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>130</y>
+          <width>111</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="wrapping">
+         <bool>false</bool>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBox2">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>460</y>
+          <width>111</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBox3">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>490</y>
+          <width>111</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBox4">
+        <property name="geometry">
+         <rect>
+          <x>390</x>
+          <y>530</y>
+          <width>111</width>
+          <height>26</height>
+         </rect>
         </property>
        </widget>
       </widget>

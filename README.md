@@ -31,4 +31,16 @@ Fine tuned Craft is used for splitting lines of 2 line license plates. Refiner m
 ### OCR. Optical character recognition.
 Fine tuned easyocr model for recognizing letters and digits after craft.
 
+### Performance
+2 spots per camera
+#### PC(CPU)
+1 camera - 1.1 FPS
+4 cameras - 0.28 FPS 
+#### NANO(CPU)
+1 camera - 
+4 cameras - Luchshe ne nada
+#### NANO(GPU)
+1 camera - 1 FPS
+4 cameras - 0.4 FPS
+
 ## DO NOT DELETE "URLs.json" "userInfo.json" "whiteList.json" files

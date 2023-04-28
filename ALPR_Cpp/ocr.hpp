@@ -40,6 +40,7 @@ std::tuple<std::string,float> ocr_run(std::vector<cv::Mat> lines,torch::jit::Mod
     for(cv::Mat line: lines){
         // cv::imshow("CAP",line);
         // cv::waitKey(0);
+
         torch::Tensor image = AlignCollate(line).out_image;
         
         int batch_size = 1;
@@ -60,6 +61,18 @@ std::tuple<std::string,float> ocr_run(std::vector<cv::Mat> lines,torch::jit::Mod
         torch::Tensor preds_max_prob = std::get<0>(preds_prob.max(2));
         std::string prediction="";
         torch::Tensor confidence_score = torch::zeros(10);
+        // torch::Tensor image = AlignCollate(line).out_image.to(torch::kCUDA);
+        // int batch_size = 1;
+        // torch::Tensor length_for_pred = torch::zeros(1, torch::kCUDA);
+        // torch::Tensor text_for_pred = torch::zeros({1, 12}, torch::kCUDA);
+        // std::vector<torch::jit::IValue> inputs = {image.to(torch::kFloat32)};
+        // torch::Tensor preds = model.forward(inputs).toTensor();
+        // torch::Tensor preds_index = std::get<1>(preds.max(2));
+        // preds_str = converter.decode(preds_index, length_for_pred);
+        // torch::Tensor preds_prob = torch::nn::functional::softmax(preds, torch::nn::functional::SoftmaxFuncOptions(2)).to(torch::kCPU);
+        // torch::Tensor preds_max_prob = std::get<0>(preds_prob.max(2));
+        // std::string prediction="";
+        // torch::Tensor confidence_score = torch::zeros(10, torch::kCPU);
 
 
         for(int i=0;i< preds_str.size();i++)

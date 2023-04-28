@@ -4,6 +4,8 @@ bool run_status = true;
 
 // Main ALPR function. The whole logic of recognition.  
 void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::vector<std::string> capture_source){
+    model_ocr.to(device);
+
     std::cout<<"STARTING ALPR\n";
     call_ram_info();
     std::ifstream file;
@@ -187,9 +189,13 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                                     std::vector<cv::Mat> lines = number_images[nm_img];
                                     std::cout<<"BEFORE OCR proflie\n";
                                     call_ram_info();
-
-                                    std::tuple<std::string,float> out = ocr_run(lines, model_ocr, converter);
-
+                                    std::tuple<std::string,float> out;
+                                    for(int i=0; i<15; i++){
+                                        auto start_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                                        out = ocr_run(lines, model_ocr, converter);
+                                        auto end_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                                        std::cout<<"FPS: "<<1000.0/(end_time-start_time)<<std::endl;
+                                    }
                                     std::cout<<"AFTER OCR proflie\n";
                                     call_ram_info();
 
