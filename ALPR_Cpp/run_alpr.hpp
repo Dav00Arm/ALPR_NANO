@@ -115,10 +115,10 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
 
                 std::vector<cv::Mat> car_images;
                 std::vector<std::vector<std::vector<int>>> car_boxes;
-                std::vector<std::string> labels;
+                std::vector<std::string> pred_labels;
                 std::cout<<"Car detection proflie\n";
                 call_ram_info();
-                std::tie(car_images, car_boxes, labels) = car_detection_yolo_one_id(frame,32,false,320);
+                std::tie(car_images, car_boxes, pred_labels) = car_detection_yolo_one_id(frame,32,false,320);
 
                 std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out_plate;
                 std::vector<std::vector<std::vector<int>>> bbox;
@@ -201,7 +201,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
 
                                     std::string prediction = RusPlateProcess(std::get<0>(out));
 
-                                    std::string label = labels[car_ind_dict[one_spot_dict.first]];
+                                    std::string label = pred_labels[car_ind_dict[one_spot_dict.first]];
                                     std::cout << label << std::endl;
 
                                     std::string color = car_colors_dict[one_spot_dict.first];
