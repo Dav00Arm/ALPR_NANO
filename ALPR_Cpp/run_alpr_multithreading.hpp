@@ -88,10 +88,10 @@ private:
                 for(int j=0;j<spot_bboxes.size();j++)
                 {
                     bbbox1 = spot_bboxes[j];
-                    cv::line(frame,spot_bboxes[j][1], spot_bboxes[j][2], cv::Scalar(0,0,255),2);
-                    cv::line(frame,spot_bboxes[j][0], spot_bboxes[j][1], cv::Scalar(0,0,255),2);
-                    cv::line(frame,spot_bboxes[j][2], spot_bboxes[j][3], cv::Scalar(0,0,255),2);
-                    cv::line(frame,spot_bboxes[j][3], spot_bboxes[j][0], cv::Scalar(0,0,255),2);
+                    cv::line(frame, spot_bboxes[j][1], spot_bboxes[j][2], cv::Scalar(0,0,255),2);
+                    cv::line(frame, spot_bboxes[j][0], spot_bboxes[j][1], cv::Scalar(0,0,255),2);
+                    cv::line(frame, spot_bboxes[j][2], spot_bboxes[j][3], cv::Scalar(0,0,255),2);
+                    cv::line(frame, spot_bboxes[j][3], spot_bboxes[j][0], cv::Scalar(0,0,255),2);
                 }
 
                 cv::Mat resized_frame;
@@ -107,7 +107,7 @@ private:
                 std::vector<std::string> pred_labels;
                 std::cout<<"Car detection proflie\n";
                 call_ram_info();
-                std::tie(car_images, car_boxes, pred_labels) = car_detection_yolo_one_id(frame,32,false,320);
+                std::tie(car_images, car_boxes, pred_labels) = car_detection_yolo_one_id(frame, 32, false, 320);
 
                 std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out_plate;
                 std::vector<std::vector<std::vector<int>>> bbox;
