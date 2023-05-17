@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+ALPR_Cpp/build/
+ALPR_Cpp/models/
+ALPR_Cpp/onnxruntime/
+ALPR_Cpp/tbb/
+ALPR_Cpp/torch/
+ALPR_Cpp/tst.cpp
+build/
+cmake-3.23.3/
+cmake-build-debug/
+images/
