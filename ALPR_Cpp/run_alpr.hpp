@@ -7,7 +7,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
     model_ocr.to(device);
 
     std::cout<<"STARTING ALPR\n";
-    call_ram_info();
+//    call_ram_info();
     std::ifstream file;
     file.open(spot_config);
     cv::Size label_size(labels[0]->width(), labels[0]->height());
@@ -81,7 +81,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
     }
     std::cout<<"Starting"<<std::endl;
     auto start_time = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    call_ram_info();
+//    call_ram_info();
     while (cv::waitKey(20) != 27)
     {
         auto start = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -91,7 +91,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
             std::vector<cv::Mat> ill_frames;
             bool gotFrame = cam.frame_queue[cam_id].try_pop(frame);
             // if (cam.frame_queue[cam_id].try_pop(frame))
-            std::cout<<"gotFrame == "<<gotFrame<<std::endl;
+//            std::cout<<"gotFrame == "<<gotFrame<<std::endl;
             // std::cout<<"frame.empty(): "<<frame.empty()<<std::endl;
             if(gotFrame) // && !frame.empty()
             {                
@@ -117,7 +117,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                 std::vector<std::vector<std::vector<int>>> car_boxes;
                 std::vector<std::string> pred_labels;
                 std::cout<<"Car detection proflie\n";
-                call_ram_info();
+//                call_ram_info();
                 std::tie(car_images, car_boxes, pred_labels) = car_detection_yolo_one_id(frame,32,false,320);
 
                 std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> out_plate;
@@ -127,10 +127,10 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                     std::vector<std::vector<int>> track_boxes;
                 }
                 std::cout<<"BEFORE Plate detection proflie\n";
-                call_ram_info();
+//                call_ram_info();
                 out_plate = detect_plate_onnx_id(frame, car_images, car_boxes);
                 std::cout<<"AFTER Plate detection proflie\n";
-                call_ram_info();
+//                call_ram_info();
                 if(out_plate.size()>0){
                     std::unordered_map<int, cv::Mat> spot_dict;
                     std::unordered_map<int, std::string> current_spot_dict;
@@ -180,15 +180,15 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                     for(auto one_spot_dict: spot_dict){
                         if(one_spot_dict.second.rows > 0){
                             std::cout<<"BEFORE CRAFT proflie\n";
-                            call_ram_info();
+//                            call_ram_info();
                             std::vector<std::vector<cv::Mat>> number_images = crop_lines(one_spot_dict.second);
                             std::cout<<"AFTER CRAFT proflie\n";
-                            call_ram_info();
+//                            call_ram_info();
                             if(number_images.size()>0){
                                 for(int nm_img=0; nm_img<number_images.size(); nm_img++){
                                     std::vector<cv::Mat> lines = number_images[nm_img];
                                     std::cout<<"BEFORE OCR proflie\n";
-                                    call_ram_info();
+//                                    call_ram_info();
                                     std::tuple<std::string,float> out;
                                     for(int i=0; i<15; i++){
                                         auto start_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -197,7 +197,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                                         std::cout<<"FPS: "<<1000.0/(end_time-start_time)<<std::endl;
                                     }
                                     std::cout<<"AFTER OCR proflie\n";
-                                    call_ram_info();
+//                                    call_ram_info();
 
                                     std::string prediction = RusPlateProcess(std::get<0>(out));
 
@@ -233,21 +233,6 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                         }
                     }
                 }
-                // cv::Point org(25, 50);
-                // cv::Scalar color(209, 121, 27);
-                // double fontScale = 1.5;
-                // int thickness = 2;
-                // int fontFace = cv::FONT_HERSHEY_SIMPLEX;
-
-                // putText(frame, cam_names[cam_id], org, fontFace, fontScale, color, thickness);
-                
-                // // cv::putText(frame, cam_names[cam_id], cv::Point(50, 50), 2, (0,0,255), 5);
-                // cv::Mat resized_frame;
-                // cv::resize(frame, resized_frame, label_size, cv::INTER_AREA);
-                // QImage qImage = MatToQImage(resized_frame);
-                // QPixmap pixmap = QPixmap::fromImage(qImage); 
-
-                // labels[cam_id]->setPixmap(pixmap);
             }
         }
         wait_time = 0;
@@ -281,7 +266,7 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
         if(run_status == false){
             return; 
         }
-           // std::cout<<"FPS: "<<1.0/(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count()-start)*1000<<std::endl;
+            std::cout<<"FPS: "<<1.0/(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count()-start)*1000<<std::endl;
     }
     
     return;

@@ -44,7 +44,11 @@ std::vector<cv::Point> bbbox1;
 std::string p = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!pn$s&'()*+,-./:;<=>?@[\\]^_`{|}~"; //ՊՆՇՍՏ
 AttnLabelConverter converter(p);
 // torch::jit::Module model_ocr;
-torch::Device device(torch::kCUDA);
+
+//torch::Device device(torch::kCUDA);
+torch::Device device(torch::kCPU);
+
+
 torch::jit::Module model_ocr = torch::jit::load(path);
 // model_ocr.to(device);
 // std::vector<std::string> capture_source = {
