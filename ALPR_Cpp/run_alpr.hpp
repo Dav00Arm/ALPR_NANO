@@ -58,7 +58,6 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
 //    call_ram_info();
 
     int last_req_time = 0;
-    cv::Point fps_org(resized_frame.cols - 70, 40);
     while (cv::waitKey(20) != 27)
     {
         int frame_processing_start_time = 0;
@@ -170,6 +169,8 @@ void alpr(std::vector<QLabel*> labels, std::vector<std::string> cam_names, std::
                 }
                 float fps = 1 / (time(NULL) - frame_processing_start_time + EPS);
                 fps = std::round(fps * 100) / 100;
+                cv::Point fps_org(resized_frame.cols - 70, 40);
+
                 putText(resized_frame, std::to_string(fps), fps_org, fontFace, 1.0, color, thickness);
 
                 QImage qImage = MatToQImage(resized_frame);
