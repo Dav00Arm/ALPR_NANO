@@ -7,20 +7,17 @@ int time_now(){
 }
 
 // Check if license plate box is in drawn zone.
-std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
-    std::unordered_map<int, std::string>,std::vector<std::vector<std::vector<std::vector<int>>>>,
+std::tuple<std::unordered_map<int, cv::Mat>,
+    std::vector<std::vector<int>>,
     std::unordered_map<int, int>>
-    check_box(cv::Mat frame, int cam_id, std::vector<std::vector<cv::Point>> spots, 
-    std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> all_coordinates, std::vector<std::vector<int>> plate_read,
-    std::vector<std::vector<std::vector<std::vector<int>>>> plate_zone){
+    check_box(cv::Mat frame,
+              int cam_id,
+              std::vector<std::vector<cv::Point>> spots,
+              std::unordered_map<int, std::tuple<std::vector<cv::Mat>, std::vector<std::vector<std::vector<int>>>>> all_coordinates,
+              std::vector<std::vector<int>> plate_zone){
     
     std::unordered_map<int, cv::Mat> spot_dict; // NEW PLATES TO READ
-    std::unordered_map<int, std::string> current_spot_dict;
     std::unordered_map<int, int> car_ind_dict;
-    
-    for(int s=0; s<spots.size(); s++){
-        current_spot_dict[s] = "Free";
-    }
     
     for(auto pair: all_coordinates){
         std::vector<cv::Mat> imgs = std::get<0>(pair.second);
@@ -30,33 +27,10 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
         for(int j=0; j<boxes.size(); j++){
             for(int i=0; i<spots.size(); i++){
                 bool plate_in_spot = checkInside(spots[i], boxes[j]);
-                if(plate_in_spot){
-                    current_spot_dict[i] = "Busy";
-
-                    // A new car came, and plate isn't recognized yet.
-                    if(plate_zone[cam_id][i].size() == 0){
-                        int x1 = boxes[j][0][0]-10;
-                        int y1 = boxes[j][0][1]-10;
-                        int x2 = boxes[j][1][0]+10;
-                        int y2 = boxes[j][1][1]+10;
-                        plate_zone[cam_id][i] = {{x1, y1}, {x2, y2}};
-                        spot_dict[i] = imgs[j];
-                        car_ind_dict[i] = car_ind;
-                    }
-
-                    // The plate is not in the zone
-                    else if(plate_zone[cam_id][i].size() != 0 ){
-                        bool plate_in_zone = checkInside(plate_zone[cam_id][i], boxes[j]);
-                        if(plate_in_zone == false){
-                            if(plate_read[cam_id][i] == -1){
-                                plate_read[cam_id][i] = time_now();
-                            }
-                            if(time_now() - plate_read[cam_id][i] >= 3){
-                                plate_zone[cam_id][i] = {};
-                                plate_read[cam_id][i] = -1;
-                            }
-                        }
-                    }
+                if(plate_in_spot && (plate_zone[cam_id][i] == -1 || plate_zone[cam_id][i] != car_ind)){
+                    plate_zone[cam_id][i] = car_ind;
+                    spot_dict[i] = imgs[j];
+                    car_ind_dict[i] = car_ind;
                 }
                 // Draw the zone 
                 // if(plate_zone[cam_id][i].size() != 0){
@@ -67,7 +41,7 @@ std::tuple<std::unordered_map<int, cv::Mat>, std::vector<std::vector<int>>,
             }
         }
     }
-    return {spot_dict, plate_read, current_spot_dict, plate_zone, car_ind_dict};
+    return {spot_dict, plate_zone, car_ind_dict};
 }
 
 // Splits string with given delimeter (the same as python split()).

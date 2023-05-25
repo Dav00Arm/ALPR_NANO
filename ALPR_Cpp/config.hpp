@@ -6,6 +6,8 @@
 #include <opencv2/opencv.hpp>
 #include <torch/torch.h>
 #include <QLabel>
+#include <ctime>
+#include <cmath>
 #include "cameraStreamer.hpp"
 #include "draw_spots.hpp"
 #include "dtc.hpp"
@@ -60,3 +62,7 @@ torch::jit::Module model_ocr = torch::jit::load(path);
 // };
 std::vector<std::string> mac_addresses = {"9c:14:63:64:ec:c0","9c:14:63:64:e5:f0","9c:14:63:64:e8:ac","9c:14:63:64:eb:0a","9c:14:63:64:e8:af"};
 
+int ocr_conf_threshold = 97;
+std::string barrier_open_url = "http://192.168.2.214/api/ForceOpen";
+int request_timeout = 2;
+const float EPS = 1e-5;

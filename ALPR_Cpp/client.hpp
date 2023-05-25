@@ -283,3 +283,44 @@ void OpenGate(int state){
     close(sock);
 
 }
+
+
+// This function will be used as the callback for writing the response content
+size_t write_callback(char* contents, size_t size, size_t nmemb, std::string* response) {
+    size_t totalSize = size * nmemb;
+    response->append(contents, totalSize);
+    return totalSize;
+}
+
+
+void request_to_barrier(std::string url){
+    CURL* curl;
+    CURLcode res;
+
+    // Initialize the cURL session
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    curl = curl_easy_init();
+
+    if (curl) {
+
+        // Set the URL to make the GET request
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+
+        // Set the callback function for writing the response content
+        std::string response;
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+        // Perform the GET request
+        res = curl_easy_perform(curl);
+        if (res != CURLE_OK) {
+            std::cerr << "Some problems occurred during sending the data" << std::endl;
+        }
+
+        // Clean up
+        curl_easy_cleanup(curl);
+    }
+
+    // Clean up the global cURL environment
+    curl_global_cleanup();
+}
